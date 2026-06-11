@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from "react";
 
 const INTERNAL_ROUTES = new Set([
-  'caixabank',
-  'gymondo-premium',
-  'gymondo-challenges',
-  'zattoo',
-  'neotaste-onboarding',
-  'neotaste-quests',
+  "caixabank",
+  "gymondo-premium",
+  "gymondo-challenges",
+  "zattoo",
+  "neotaste-onboarding",
+  "neotaste-quests",
 ]);
 
 function normalizeAssetPath(value) {
@@ -15,41 +15,49 @@ function normalizeAssetPath(value) {
   }
 
   if (
-    value.startsWith('http://') ||
-    value.startsWith('https://') ||
-    value.startsWith('mailto:') ||
-    value.startsWith('tel:') ||
-    value.startsWith('data:') ||
-    value.startsWith('#') ||
-    value.startsWith('/')
+    value.startsWith("http://") ||
+    value.startsWith("https://") ||
+    value.startsWith("mailto:") ||
+    value.startsWith("tel:") ||
+    value.startsWith("data:") ||
+    value.startsWith("#") ||
+    value.startsWith("/")
   ) {
     return value;
   }
 
-  if (value.startsWith('../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js')) {
-    return '/vendor/gsap/gsap.min.js';
+  if (
+    value.startsWith(
+      "../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    )
+  ) {
+    return "/vendor/gsap/gsap.min.js";
   }
 
-  if (value.startsWith('../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js')) {
-    return '/vendor/gsap/ScrollTrigger.min.js';
+  if (
+    value.startsWith(
+      "../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    )
+  ) {
+    return "/vendor/gsap/ScrollTrigger.min.js";
   }
 
-  if (value === 'index.html') {
-    return '/';
+  if (value === "index.html") {
+    return "/";
   }
 
-  if (value.startsWith('index.html#')) {
-    return `/${value.slice('index.html'.length)}`;
+  if (value.startsWith("index.html#")) {
+    return `/${value.slice("index.html".length)}`;
   }
 
-  if (value.startsWith('images/')) {
+  if (value.startsWith("images/")) {
     return `/${value}`;
   }
 
   if (
-    value.startsWith('favicon') ||
-    value.startsWith('apple-touch-icon') ||
-    value.endsWith('.pdf')
+    value.startsWith("favicon") ||
+    value.startsWith("apple-touch-icon") ||
+    value.endsWith(".pdf")
   ) {
     return `/${value}`;
   }
@@ -71,11 +79,11 @@ function extractNavigationTarget(onclickValue) {
 }
 
 function parseLegacyHtml(rawHtml) {
-  const normalizedHtml = rawHtml.replaceAll('David Rodriguez', "I'm Athul");
+  const normalizedHtml = rawHtml.replaceAll("David Rodriguez", "I'm Athul");
   const parser = new DOMParser();
-  const doc = parser.parseFromString(normalizedHtml, 'text/html');
+  const doc = parser.parseFromString(normalizedHtml, "text/html");
 
-  const aboutBio = doc.querySelector('#about .about-bio');
+  const aboutBio = doc.querySelector("#about .about-bio");
   if (aboutBio) {
     aboutBio.innerHTML = `
       <p><strong>I'm Athul, a Bengaluru-based Software Engineer</strong> with 3 years of experience building responsive and high-performance web applications. I completed my BTech in Computer Science and Engineering from College of Engineering Thalassery between 2018 and 2022.</p>
@@ -91,7 +99,7 @@ function parseLegacyHtml(rawHtml) {
     `;
   }
 
-  const aboutSide = doc.querySelector('#about .about-side');
+  const aboutSide = doc.querySelector("#about .about-side");
   if (aboutSide) {
     aboutSide.innerHTML = `
       <div>
@@ -158,20 +166,6 @@ function parseLegacyHtml(rawHtml) {
             </div>
             <span class="ei-yr">Whizlabs</span>
           </li>
-          <li class="exp-item">
-            <div class="ei-l">
-              <span class="ei-co">Jira-like Activity Tracker</span>
-              <span class="ei-role">Employee tracking web app</span>
-            </div>
-            <span class="ei-yr">Whizlabs</span>
-          </li>
-          <li class="exp-item">
-            <div class="ei-l">
-              <span class="ei-co">Corporate E-learning Platform</span>
-              <span class="ei-role">Platform enhancement work</span>
-            </div>
-            <span class="ei-yr">Whizlabs</span>
-          </li>
         </ul>
       </div>
       <div>
@@ -196,27 +190,75 @@ function parseLegacyHtml(rawHtml) {
     `;
   }
 
+  const workSection = doc.querySelector("#work");
+  if (workSection) {
+    workSection.insertAdjacentHTML(
+      "afterend",
+      `
+        <section style="padding:0 44px 36px;">
+          <div style="border:1px solid var(--border); border-radius:14px; padding:40px 36px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:18px;">
+              <div>
+                <p style="margin:0 0 8px; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted);">Core Stack</p>
+                <h2 style="margin:0; font-family:'Syne',sans-serif; font-size:clamp(32px,5vw,56px); line-height:0.95; letter-spacing:-0.04em;">Skills That I Use To Build</h2>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:16px;">
+              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+                <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">React JS</div>
+                <img src="/images/React.png" alt="React logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+              </div>
+              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+                <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Node.js</div>
+                <img src="/images/Node.js.png" alt="Node.js logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+              </div>
+              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+                <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Express JS</div>
+                <img src="/images/Express.png" alt="Express logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+              </div>
+              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+                <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">MongoDB</div>
+                <img src="/images/MongoDB.png" alt="MongoDB logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+              </div>
+              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+                <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Firebase</div>
+                <img src="/images/Firebase.png" alt="Firebase logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+              </div>
+              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+                <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">PostgreSQL</div>
+                <img src="/images/PostgresSQL.png" alt="PostgreSQL logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+              </div>
+            </div>
+          </div>
+        </section>
+      `,
+    );
+  }
+
   const description =
-    doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-  const title = doc.title || 'Portfolio';
-  const styles = Array.from(doc.querySelectorAll('style')).map((style) => style.textContent ?? '');
-  const scripts = Array.from(doc.querySelectorAll('script'))
+    doc.querySelector('meta[name="description"]')?.getAttribute("content") ??
+    "";
+  const title = doc.title || "Portfolio";
+  const styles = Array.from(doc.querySelectorAll("style")).map(
+    (style) => style.textContent ?? "",
+  );
+  const scripts = Array.from(doc.querySelectorAll("script"))
     .map((script) => ({
-      src: normalizeAssetPath(script.getAttribute('src') || ''),
-      text: script.textContent ?? '',
+      src: normalizeAssetPath(script.getAttribute("src") || ""),
+      text: script.textContent ?? "",
     }))
     .filter(
       (script) =>
         script.src ||
         (script.text &&
-          !script.text.includes('googletagmanager.com/gtag/js') &&
+          !script.text.includes("googletagmanager.com/gtag/js") &&
           !script.text.includes("gtag('config'")),
     );
 
-  doc.querySelectorAll('script').forEach((script) => script.remove());
+  doc.querySelectorAll("script").forEach((script) => script.remove());
 
-  doc.querySelectorAll('[src],[href],[poster]').forEach((element) => {
-    ['src', 'href', 'poster'].forEach((attribute) => {
+  doc.querySelectorAll("[src],[href],[poster]").forEach((element) => {
+    ["src", "href", "poster"].forEach((attribute) => {
       const value = element.getAttribute(attribute);
       if (value) {
         element.setAttribute(attribute, normalizeAssetPath(value));
@@ -224,20 +266,20 @@ function parseLegacyHtml(rawHtml) {
     });
   });
 
-  doc.querySelectorAll('[onclick]').forEach((element) => {
-    const target = extractNavigationTarget(element.getAttribute('onclick'));
-    element.removeAttribute('onclick');
+  doc.querySelectorAll("[onclick]").forEach((element) => {
+    const target = extractNavigationTarget(element.getAttribute("onclick"));
+    element.removeAttribute("onclick");
     if (target) {
-      element.setAttribute('data-nav', target);
-      element.setAttribute('role', element.getAttribute('role') || 'link');
-      element.setAttribute('tabindex', element.getAttribute('tabindex') || '0');
+      element.setAttribute("data-nav", target);
+      element.setAttribute("role", element.getAttribute("role") || "link");
+      element.setAttribute("tabindex", element.getAttribute("tabindex") || "0");
     }
   });
 
   return {
     bodyHtml: doc.body.innerHTML,
     description,
-    lang: doc.documentElement.lang || 'en',
+    lang: doc.documentElement.lang || "en",
     scripts,
     styles,
     title,
@@ -247,20 +289,20 @@ function parseLegacyHtml(rawHtml) {
 function setMetaDescription(content) {
   let element = document.querySelector('meta[name="description"]');
   if (!element) {
-    element = document.createElement('meta');
-    element.name = 'description';
+    element = document.createElement("meta");
+    element.name = "description";
     document.head.appendChild(element);
   }
 
-  element.setAttribute('content', content);
+  element.setAttribute("content", content);
 }
 
 async function appendScript(script) {
   return new Promise((resolve, reject) => {
-    const element = document.createElement('script');
+    const element = document.createElement("script");
 
     if (script.src) {
-      element.setAttribute('data-react-legacy-script', 'true');
+      element.setAttribute("data-react-legacy-script", "true");
       element.src = script.src;
       element.async = false;
       element.onload = resolve;
@@ -269,7 +311,7 @@ async function appendScript(script) {
       return;
     }
 
-    element.setAttribute('data-react-legacy-script', 'true');
+    element.setAttribute("data-react-legacy-script", "true");
     element.text = `(function(){\n${script.text}\n})();`;
     document.body.appendChild(element);
     resolve();
@@ -284,11 +326,11 @@ export default function LegacyPage({ page }) {
     document.documentElement.lang = parsed.lang;
     document.title = parsed.title;
     setMetaDescription(parsed.description);
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
     const styleNodes = parsed.styles.map((text) => {
-      const node = document.createElement('style');
-      node.setAttribute('data-react-legacy-style', 'true');
+      const node = document.createElement("style");
+      node.setAttribute("data-react-legacy-style", "true");
       node.textContent = text;
       document.head.appendChild(node);
       return node;
@@ -305,7 +347,7 @@ export default function LegacyPage({ page }) {
         try {
           await appendScript(script);
         } catch (error) {
-          console.error('Failed to load legacy script', error);
+          console.error("Failed to load legacy script", error);
         }
       }
     })();
@@ -313,7 +355,9 @@ export default function LegacyPage({ page }) {
     return () => {
       cancelled = true;
       styleNodes.forEach((node) => node.remove());
-      document.querySelectorAll('script[data-react-legacy-script]').forEach((node) => node.remove());
+      document
+        .querySelectorAll("script[data-react-legacy-script]")
+        .forEach((node) => node.remove());
     };
   }, [parsed]);
 
@@ -324,42 +368,47 @@ export default function LegacyPage({ page }) {
     }
 
     const handleClick = (event) => {
-      const link = event.target.closest('[data-nav]');
+      const link = event.target.closest("[data-nav]");
       if (!link) {
         return;
       }
 
-      const target = link.getAttribute('data-nav');
+      const target = link.getAttribute("data-nav");
       if (target) {
         window.location.assign(target);
       }
     };
 
     const handleKeyDown = (event) => {
-      if (event.key !== 'Enter' && event.key !== ' ') {
+      if (event.key !== "Enter" && event.key !== " ") {
         return;
       }
 
-      const link = event.target.closest('[data-nav]');
+      const link = event.target.closest("[data-nav]");
       if (!link) {
         return;
       }
 
       event.preventDefault();
-      const target = link.getAttribute('data-nav');
+      const target = link.getAttribute("data-nav");
       if (target) {
         window.location.assign(target);
       }
     };
 
-    root.addEventListener('click', handleClick);
-    root.addEventListener('keydown', handleKeyDown);
+    root.addEventListener("click", handleClick);
+    root.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      root.removeEventListener('click', handleClick);
-      root.removeEventListener('keydown', handleKeyDown);
+      root.removeEventListener("click", handleClick);
+      root.removeEventListener("keydown", handleKeyDown);
     };
   }, [parsed.bodyHtml]);
 
-  return <div ref={containerRef} dangerouslySetInnerHTML={{ __html: parsed.bodyHtml }} />;
+  return (
+    <div
+      ref={containerRef}
+      dangerouslySetInnerHTML={{ __html: parsed.bodyHtml }}
+    />
+  );
 }
