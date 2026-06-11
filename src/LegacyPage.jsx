@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { Fragment, useEffect, useMemo, useRef } from "react";
 
 const INTERNAL_ROUTES = new Set([
   "caixabank",
@@ -82,6 +82,11 @@ function parseLegacyHtml(rawHtml) {
   const normalizedHtml = rawHtml.replaceAll("David Rodriguez", "I'm Athul");
   const parser = new DOMParser();
   const doc = parser.parseFromString(normalizedHtml, "text/html");
+
+  const preloaderLabel = doc.querySelector(".pl-name span");
+  if (preloaderLabel) {
+    preloaderLabel.textContent = "Loading...";
+  }
 
   const aboutBio = doc.querySelector("#about .about-bio");
   if (aboutBio) {
@@ -377,14 +382,6 @@ export default function LegacyPage({ page }) {
     setMetaDescription(parsed.description);
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-    const styleNodes = parsed.styles.map((text) => {
-      const node = document.createElement("style");
-      node.setAttribute("data-react-legacy-style", "true");
-      node.textContent = text;
-      document.head.appendChild(node);
-      return node;
-    });
-
     let cancelled = false;
 
     (async () => {
@@ -403,7 +400,6 @@ export default function LegacyPage({ page }) {
 
     return () => {
       cancelled = true;
-      styleNodes.forEach((node) => node.remove());
       document
         .querySelectorAll("script[data-react-legacy-script]")
         .forEach((node) => node.remove());
@@ -455,9 +451,18 @@ export default function LegacyPage({ page }) {
   }, [parsed.bodyHtml]);
 
   return (
-    <div
-      ref={containerRef}
-      dangerouslySetInnerHTML={{ __html: parsed.bodyHtml }}
-    />
+    <Fragment>
+      {parsed.styles.map((text, index) => (
+        <style
+          key={index}
+          data-react-legacy-style="true"
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      ))}
+      <div
+        ref={containerRef}
+        dangerouslySetInnerHTML={{ __html: parsed.bodyHtml }}
+      />
+    </Fragment>
   );
 }
