@@ -196,6 +196,55 @@ function parseLegacyHtml(rawHtml) {
       "afterend",
       `
         <section style="padding:0 44px 36px;">
+          <style>
+            .core-stack-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+              gap: 16px;
+            }
+            .core-stack-card {
+              border: 1px solid var(--border);
+              border-radius: 14px;
+              padding: 18px 14px;
+              text-align: center;
+              transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+              background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0));
+            }
+            .core-stack-card:hover {
+              transform: translateY(-6px);
+              border-color: var(--border-hover);
+              box-shadow: 0 14px 36px rgba(0,0,0,0.22);
+              background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            }
+            .core-stack-logo {
+              height: 44px;
+              width: auto;
+              max-width: 100%;
+              object-fit: contain;
+              margin: 0 auto;
+              animation: core-stack-float 3.4s ease-in-out infinite;
+              transform-origin: center;
+            }
+            .core-stack-card:nth-child(2) .core-stack-logo { animation-delay: 0.2s; }
+            .core-stack-card:nth-child(3) .core-stack-logo { animation-delay: 0.4s; }
+            .core-stack-card:nth-child(4) .core-stack-logo { animation-delay: 0.6s; }
+            .core-stack-card:nth-child(5) .core-stack-logo { animation-delay: 0.8s; }
+            .core-stack-card:nth-child(6) .core-stack-logo { animation-delay: 1s; }
+            @keyframes core-stack-float {
+              0%, 100% { transform: translateY(0px) scale(1); }
+              50% { transform: translateY(-4px) scale(1.02); }
+            }
+            @media (prefers-reduced-motion: reduce) {
+              .core-stack-card,
+              .core-stack-logo {
+                transition: none;
+                animation: none;
+              }
+              .core-stack-card:hover {
+                transform: none;
+              }
+            }
+          </style>
           <div style="border:1px solid var(--border); border-radius:14px; padding:40px 36px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));">
             <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; margin-bottom:18px;">
               <div>
@@ -203,30 +252,30 @@ function parseLegacyHtml(rawHtml) {
                 <h2 style="margin:0; font-family:'Syne',sans-serif; font-size:clamp(32px,5vw,56px); line-height:0.95; letter-spacing:-0.04em;">Skills That I Use To Build</h2>
               </div>
             </div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:16px;">
-              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+            <div class="core-stack-grid">
+              <div class="core-stack-card">
                 <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">React JS</div>
-                <img src="/images/React.png" alt="React logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+                <img src="/images/React.png" alt="React logo" class="core-stack-logo" />
               </div>
-              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+              <div class="core-stack-card">
                 <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Node.js</div>
-                <img src="/images/Node.js.png" alt="Node.js logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+                <img src="/images/Node.js.png" alt="Node.js logo" class="core-stack-logo" />
               </div>
-              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+              <div class="core-stack-card">
                 <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Express JS</div>
-                <img src="/images/Express.png" alt="Express logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+                <img src="/images/Express.png" alt="Express logo" class="core-stack-logo" />
               </div>
-              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+              <div class="core-stack-card">
                 <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">MongoDB</div>
-                <img src="/images/MongoDB.png" alt="MongoDB logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+                <img src="/images/MongoDB.png" alt="MongoDB logo" class="core-stack-logo" />
               </div>
-              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+              <div class="core-stack-card">
                 <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Firebase</div>
-                <img src="/images/Firebase.png" alt="Firebase logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+                <img src="/images/Firebase.png" alt="Firebase logo" class="core-stack-logo" />
               </div>
-              <div style="border:1px solid var(--border); border-radius:14px; padding:18px 14px; text-align:center;">
+              <div class="core-stack-card">
                 <div style="font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">PostgreSQL</div>
-                <img src="/images/PostgresSQL.png" alt="PostgreSQL logo" style="height:44px; width:auto; max-width:100%; object-fit:contain; margin:0 auto;" />
+                <img src="/images/PostgresSQL.png" alt="PostgreSQL logo" class="core-stack-logo" />
               </div>
             </div>
           </div>
