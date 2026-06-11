@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from dvdrod.com/gymondo-premium by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Jun 2026 05:30:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5DGNJQL76"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C5DGNJQL76');
+  </script>
+  <script>(function(){var s=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',s?s:(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));}());</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <title>Go Premium Screen — Athul Sudhakaran</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&amp;display=swap" rel="stylesheet"/>
+  <style>
+    /* ============================================
+       VARIABLES & THEMES
+    ============================================ */
+    :root {
+      --bg:        #0C0C0B;
+      --bg2:       #141413;
+      --fg:        #EDEDE8;
+      --muted:     #93938F;
+      --border:    rgba(237,237,232,0.09);
+      --accent:    #FF3D00;
+      --radius:    14px;
+      --transition: 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    [data-theme="light"] {
+      --bg:  #F0EDE5; --bg2: #E8E5DD;
+      --fg:  #0C0C0B;
+      --muted:  #5B5A57;
+      --border: rgba(12,12,11,0.1);
+      --accent: #FF3D00;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+    @media (pointer: coarse) {
+      *, *::before, *::after { cursor: auto !important; }
+      body { cursor: auto; }
+      .cursor { display: none !important; }
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--fg);
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* Noise */
+    body::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9997;
+      opacity:0.028;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* ── CURSOR ── */
+    .cursor { position:fixed; top:0; left:0; pointer-events:none; z-index:9999; will-change:transform; opacity:0; }
+
+    @keyframes pill-bounce {
+      0%   { transform: scale(1,1); }
+      18%  { transform: scale(1.14,0.86); }
+      38%  { transform: scale(0.93,1.07); }
+      58%  { transform: scale(1.05,0.96); }
+      78%  { transform: scale(0.98,1.02); }
+      100% { transform: scale(1,1); }
+    }
+    .cursor-arrow { position:absolute; top:0; left:0; width:22px; height:26px;
+      filter:drop-shadow(0 1px 3px rgba(0,0,0,.45));
+      transition:transform .2s cubic-bezier(.25,.46,.45,.94); }
+    .cursor-arrow svg { display:block; }
+    .cursor-label {
+      position:absolute; top:18px; left:16px;
+      background:#1A1A19; color:#EDEDE8;
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:600;
+      letter-spacing:.04em; padding:4px 10px 4px 8px;
+      border-radius:100px; white-space:nowrap;
+      display:flex; align-items:center; gap:5px;
+      box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.07);
+      transition:background .25s ease,transform .2s cubic-bezier(.25,.46,.45,.94);
+    }
+    .cursor-label-dot { width:6px; height:6px; border-radius:50%; background:#FF3D00; flex-shrink:0; }
+    body.is-hovering .cursor-arrow { transform:rotate(-12deg) scale(.92); }
+    body.is-hovering .cursor-label { background:#FF3D00; color:#fff; animation:pill-bounce 0.42s cubic-bezier(.36,.07,.19,.97); }
+    body.is-hovering .cursor-label-dot { background:rgba(255,255,255,.6); }
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      padding:22px 44px; display:flex; justify-content:space-between; align-items:center;
+      transition:padding .45s cubic-bezier(.4,0,.2,1), top .45s cubic-bezier(.4,0,.2,1),
+        left .45s cubic-bezier(.4,0,.2,1), right .45s cubic-bezier(.4,0,.2,1),
+        border-radius .45s cubic-bezier(.4,0,.2,1), background .4s ease,
+        backdrop-filter .4s ease, box-shadow .4s ease;
+    }
+    nav.scrolled {
+      top:16px; left:44px; right:44px; padding:14px 28px; border-radius:100px;
+      background:rgba(12,12,11,.80);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      box-shadow:0 4px 24px rgba(0,0,0,.25);
+    }
+    [data-theme="light"] nav.scrolled {
+      background:rgba(240,237,229,.85);
+      box-shadow:0 4px 24px rgba(0,0,0,.10);
+    }
+    .nav-logo { font-family:'Syne',sans-serif; font-size:15px; font-weight:800; letter-spacing:-.02em; }
+    .nav-right { display:flex; align-items:center; gap:28px; }
+    .theme-btn {
+      display:flex; align-items:center; gap:7px;
+      background:none; border:1px solid var(--border); border-radius:100px;
+      padding:7px 15px; color:var(--muted);
+      font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+      transition:all .3s ease;
+    }
+    .theme-btn:hover { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+
+    /* ── PRELOADER ── */
+    #preloader {
+      position:fixed; inset:0; z-index:9000;
+      display:flex; flex-direction:column; pointer-events:none;
+    }
+    .pl-panel { flex:1; background:var(--bg); }
+
+    /* ── CASE STUDY: HERO ── */
+    .cs-hero {
+      min-height:100svh; padding:0 44px 60px;
+      display:flex; flex-direction:column; justify-content:flex-end;
+      position:relative; overflow:hidden;
+    }
+    .cs-hero-bg {
+      position:absolute; inset:0; z-index:0;
+      opacity:.18;
+      transition:opacity .6s ease;
+    }
+    .cs-hero-blob {
+      position:absolute; border-radius:50%; filter:blur(80px); opacity:.35;
+    }
+    .cs-hero-number {
+      position:absolute; top:50%; right:44px; transform:translateY(-50%);
+      font-family:'Inter',sans-serif; font-size:clamp(100px,16vw,220px);
+      font-weight:800; letter-spacing:-.05em; line-height:1;
+      color:transparent; -webkit-text-stroke:1px var(--border);
+      pointer-events:none; user-select:none; z-index:0;
+    }
+    .cs-title-wrap { position:relative; z-index:1; margin-bottom:48px; }
+    .cs-company { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+    .cs-title {
+      font-family:'Inter',sans-serif;
+      font-size:clamp(52px,9vw,130px);
+      font-weight:800; letter-spacing:-.045em; line-height:.9;
+    }
+    .cs-title .tl { overflow:hidden; display:block; }
+    .cs-title .tl span { display:block; transform:translateY(110%); }
+
+    .cs-meta-strip {
+      position:relative; z-index:1;
+      display:flex; gap:0; border:1px solid var(--border); border-radius:12px;
+      overflow:hidden; max-width:700px; opacity:0; transform:translateY(20px);
+    }
+    .cs-meta-item {
+      flex:1; padding:16px 20px; border-right:1px solid var(--border);
+    }
+    .cs-meta-item:last-child { border-right:none; }
+    .cs-meta-label { font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+    .cs-meta-value { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:-.01em; }
+
+    /* ── CASE STUDY: SECTIONS ── */
+    .cs-section { padding:100px 44px; border-top:1px solid var(--border); }
+    .cs-section-inner { max-width:1200px; margin:0 auto; }
+    .cs-section-label {
+      font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:10px;
+    }
+    .cs-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .cs-section-title {
+      font-family:'Inter',sans-serif;
+      font-size:clamp(32px,4.5vw,60px);
+      font-weight:800; letter-spacing:-.035em; line-height:1.05;
+      margin-bottom:32px; max-width:760px;
+    }
+    .cs-section-body { max-width:640px; }
+    .cs-section-body p {
+      font-size:17px; line-height:1.7; font-weight:300; color:var(--fg);
+      margin-bottom:20px;
+    }
+    .cs-section-body p:last-child { margin-bottom:0; }
+    .cs-section-body strong { font-weight:600; }
+    .cs-section-body em { font-style:normal; color:var(--accent); }
+
+    /* Two-col layout */
+    .cs-two-col { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; margin-top:48px; }
+    .cs-two-col.reverse { direction:rtl; }
+    .cs-two-col.reverse > * { direction:ltr; }
+
+    /* Finding cards */
+    .cs-findings { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:48px; }
+    .cs-finding {
+      background:var(--bg2); border:1px solid var(--border); border-radius:12px;
+      padding:28px; transition:border-color .3s;
+    }
+    .cs-finding:hover { border-color:rgba(237,237,232,.25); }
+    .cs-finding-icon { font-size:22px; margin-bottom:12px; }
+    .cs-finding-title { font-family:'Inter',sans-serif; font-size:16px; font-weight:700; margin-bottom:8px; }
+    .cs-finding-text { font-size:13px; color:var(--muted); line-height:1.6; }
+
+    /* Steps list */
+    .cs-steps { display:flex; flex-direction:column; gap:0; margin-top:40px; }
+    .cs-step {
+      display:flex; gap:24px; padding:20px 0; border-bottom:1px solid var(--border);
+      align-items:baseline;
+    }
+    .cs-step-num {
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:700;
+      color:var(--muted); letter-spacing:.08em; flex-shrink:0; width:28px;
+    }
+    .cs-step-content { flex:1; }
+    .cs-step-title { font-family:'Inter',sans-serif; font-size:17px; font-weight:700; margin-bottom:6px; }
+    .cs-step-text { font-size:14px; color:var(--muted); line-height:1.6; }
+
+    /* ── METRICS BAND ── */
+    .cs-metrics {
+      display:flex; gap:0; border:1px solid var(--border); border-radius:16px;
+      overflow:hidden; margin-top:60px;
+    }
+    .cs-metric {
+      flex:1; padding:40px 32px; border-right:1px solid var(--border); text-align:center;
+    }
+    .cs-metric:last-child { border-right:none; }
+    .cs-metric-val {
+      font-family:'Inter',sans-serif; font-size:clamp(40px,5vw,64px);
+      font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1;
+      margin-bottom:8px;
+    }
+    .cs-metric-label { font-size:12px; color:var(--muted); line-height:1.5; max-width:160px; margin:0 auto; }
+
+    /* ── VISUAL PLACEHOLDERS ── */
+    .cs-visual {
+      border-radius:16px; overflow:hidden; position:relative;
+      opacity:0; transform:translateY(24px);
+    }
+    .cs-visual.full { aspect-ratio:16/8; margin-top:64px; }
+    .cs-visual.tall { aspect-ratio:4/5; }
+    .cs-visual.wide { aspect-ratio:16/9; }
+    .cs-visual.square { aspect-ratio:1; }
+    .cs-visual-inner {
+      width:100%; height:100%; position:relative;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .cs-visual-label {
+      position:absolute; bottom:20px; left:20px;
+      font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+      color:rgba(255,255,255,.25); z-index:2;
+    }
+    /* Mockup shapes inside visual */
+    .mock-screens {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:16px;
+    }
+    .mock-screen {
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+      border-radius:12px; position:relative; overflow:hidden;
+    }
+    .mock-screen::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 100%);
+    }
+    /* Simulated UI lines inside mockups */
+    .mock-line {
+      position:absolute; height:6px; background:rgba(255,255,255,.12); border-radius:3px;
+    }
+
+    /* ── NEXT PROJECT ── */
+    .cs-next {
+      display:block; padding:80px 44px;
+      margin-top:80px;
+      border-top:1px solid var(--border);
+      background:var(--bg2);
+      transition:background .3s;
+      text-decoration:none;
+    }
+    .cs-next:hover { background:var(--bg); }
+    .cs-next-label { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+    .cs-next-inner { display:flex; justify-content:space-between; align-items:center; gap:24px; }
+    .cs-next-name {
+      font-family:'Inter',sans-serif; font-size:clamp(32px,5vw,72px);
+      font-weight:800; letter-spacing:-.04em; line-height:.95;
+      transition:color .3s;
+    }
+    .cs-next:hover .cs-next-name { color:var(--accent); }
+    .cs-next-company { font-size:13px; color:var(--muted); margin-top:8px; }
+    .cs-next-arrow {
+      width:64px; height:64px; border:1px solid var(--border); border-radius:50%;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+      transition:all .35s ease;
+    }
+    .cs-next:hover .cs-next-arrow { background:var(--accent); border-color:var(--accent); transform:rotate(45deg); }
+    .cs-next:hover .cs-next-arrow svg path { stroke:#fff; }
+
+    /* ── QUOTE CALLOUT ── */
+    .cs-quote {
+      margin:60px 0; padding:40px 44px; border-left:3px solid var(--accent);
+      background:var(--bg2); border-radius:0 12px 12px 0;
+    }
+    .cs-quote p {
+      font-family:'Inter',sans-serif; font-size:clamp(20px,2.5vw,30px);
+      font-weight:700; letter-spacing:-.02em; line-height:1.35; color:var(--fg);
+    }
+
+    /* ── RESULT HIGHLIGHT ── */
+    .cs-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:40px; }
+    .cs-result-card {
+      background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:32px;
+    }
+    .cs-result-val {
+      font-family:'Inter',sans-serif; font-size:clamp(36px,4.5vw,56px);
+      font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; margin-bottom:10px;
+    }
+    .cs-result-label { font-size:13px; color:var(--muted); line-height:1.5; }
+
+    /* ── FOOTER ── */
+    .cs-footer {
+      padding:24px 44px; border-top:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .cs-footer p { font-size:12px; color:var(--muted); }
+
+    /* SUMMARY BAND */
+    .cs-summary { padding:48px 44px; border-top:1px solid var(--border); }
+    .cs-summary-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:60px; align-items:center; }
+    .cs-summary-tldr { font-size:19px; font-weight:400; line-height:1.6; letter-spacing:-.01em; color:var(--fg); }
+    .cs-summary-tldr strong { font-weight:700; }
+    .cs-summary-stats { display:flex; gap:40px; flex-shrink:0; }
+    .cs-summary-stat { text-align:right; }
+    .cs-summary-stat-val { font-family:'Inter',sans-serif; font-size:34px; font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; }
+    .cs-summary-stat-label { font-size:11px; color:var(--muted); margin-top:4px; line-height:1.4; }
+    /* NEXT STEPS */
+    .cs-next-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+    .cs-next-step { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:28px; }
+    .cs-next-step-num { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+    .cs-next-step-title { font-size:15px; font-weight:700; margin-bottom:8px; letter-spacing:-.01em; }
+    .cs-next-step-text { font-size:13px; color:var(--muted); line-height:1.6; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:900px) {
+      nav { padding:18px 24px; }
+      nav.scrolled { top:12px; left:16px; right:16px; padding:12px 20px; }
+      .cs-hero { padding:0 24px 48px; }
+      .cs-section { padding:72px 24px; }
+      .cs-two-col { grid-template-columns:1fr; gap:40px; }
+      .cs-two-col.reverse { direction:ltr; }
+      .cs-findings { grid-template-columns:1fr; }
+      .cs-result-grid { grid-template-columns:1fr; }
+      .cs-metrics { flex-direction:column; }
+      .cs-metric { border-right:none; border-bottom:1px solid var(--border); }
+      .cs-metric:last-child { border-bottom:none; }
+      .cs-hero-number { display:none; }
+      .cs-meta-strip { flex-wrap:wrap; }
+      .cs-meta-item { min-width:50%; border-right:none; border-bottom:1px solid var(--border); }
+      .cs-footer { flex-direction:column; gap:12px; text-align:center; }
+      .scroll-hint { top:auto; bottom:56px; }
+      .cs-summary-inner { grid-template-columns:1fr; gap:32px; }
+      .cs-summary-stat { text-align:left; }
+      .cs-summary-stats { gap:24px; flex-wrap:wrap; }
+      .cs-next-steps { grid-template-columns:1fr; }
+    }
+</style>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body>
+
+  <div id="preloader" aria-hidden="true">
+    <div class="pl-panel" id="plTop"></div>
+    <div class="pl-panel" id="plBot"></div>
+  </div>
+
+  
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor-arrow">
+      <svg width="22" height="26" viewBox="0 0 22 26" fill="none">
+        <path d="M2 2L2 21L6.8 16.2L10.4 24L13.4 22.6L9.8 14.8L17 14.8L2 2Z"
+              fill="white" stroke="#0C0C0B" stroke-width="1.4"
+              stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="cursor-label">
+      <span class="cursor-label-dot"></span>
+            <span>Guest</span>
+    </div>
+  </div>
+
+  
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">dvdrod</a>
+    <div class="nav-right">
+<button class="theme-btn" id="themeBtn">
+        <span id="tIcon">◐</span><span id="tLabel">Light</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="cs-hero-bg" style="background:linear-gradient(145deg,#001209,#006B28);"></div>
+    <div class="cs-hero-blob" style="width:500px;height:500px;top:-100px;right:-100px;background:#006B28;"></div>
+    <div class="cs-hero-blob" style="width:300px;height:300px;bottom:60px;left:-80px;background:#001209;opacity:.2;"></div>
+    <span class="cs-hero-number">01</span>
+
+    <div class="cs-title-wrap">
+      <p class="cs-company">Gymondo</p>
+      <h1 class="cs-title">
+        <span class="tl"><span>Go Premium</span></span><span class="tl"><span>Screen</span></span>
+      </h1>
+    </div>
+
+    <div class="cs-meta-strip">
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Role</div>
+        <div class="cs-meta-value">Senior UI/UX Designer</div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Year</div>
+        <div class="cs-meta-value">2020 — 2021</div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Location</div>
+        <div class="cs-meta-value">Berlin, Germany</div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Type</div>
+        <div class="cs-meta-value">Conversion · A/B Testing</div>
+      </div>
+    </div>
+
+    
+    <div class="scroll-hint" style="position:absolute;top:110px;right:44px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;pointer-events:none;" aria-hidden="true">
+      <div style="width:1px;height:64px;background:var(--border);position:relative;overflow:hidden;">
+        <style>.sh-anim::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--accent);animation:shln 2.4s ease infinite;}@keyframes shln{0%{top:-100%}100%{top:100%}}</style>
+        <div class="sh-anim" style="width:100%;height:100%;"></div>
+      </div>
+      <span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-lr;">Scroll</span>
+    </div>
+
+  </section>
+
+  <!-- SUMMARY -->
+  <div class="cs-summary">
+    <div class="cs-summary-inner">
+      <p class="cs-summary-tldr">Diagnosed why the Go Premium screen was underperforming and <strong>redesigned both the screen and its placement</strong> — boosting conversion by 17% and cutting onboarding drop-off by 52% across all markets.</p>
+      <div class="cs-summary-stats">
+        <div class="cs-summary-stat"><div class="cs-summary-stat-val">+17%</div><div class="cs-summary-stat-label">Conversion rate</div></div>
+        <div class="cs-summary-stat"><div class="cs-summary-stat-val">−52%</div><div class="cs-summary-stat-label">Onboarding drop-off</div></div>
+        <div class="cs-summary-stat"><div class="cs-summary-stat-val">6</div><div class="cs-summary-stat-label">Markets impacted</div></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">01 — Context</div>
+      <h2 class="cs-section-title">A single screen was silently killing conversions in every new market.</h2>
+      <div class="cs-section-body">
+        <p>Gymondo had recently expanded to English-speaking markets where the brand was completely unknown. Conversion rates were disappointing — and data was pointing at one clear culprit.</p>
+        <p>The <strong>Go Premium screen</strong>, shown during onboarding, had a massive drop-off rate. Users were hitting a paywall before they'd experienced any value. At the same time, the subscription model itself was outdated compared to competitors, with no trial or freemium entry point.</p>
+        <p>I owned the full UX and UI scope on this project — working directly with the PM and a data analyst tracking funnel metrics, and with the iOS and Android engineers on implementation. The brief evolved beyond a screen redesign: it became a case for rethinking the subscription model itself.</p>
+      </div>
+      <div class="cs-findings" style="margin-top:48px;">
+        <div class="cs-finding">
+          <div class="cs-finding-icon">📉</div>
+          <div class="cs-finding-title">Low CR in new markets</div>
+          <div class="cs-finding-text">After opening to English-speaking countries where Gymondo was unknown, conversion rates were significantly below target.</div>
+        </div>
+        <div class="cs-finding">
+          <div class="cs-finding-icon">🚧</div>
+          <div class="cs-finding-title">Onboarding blocker</div>
+          <div class="cs-finding-text">Funnel data revealed a huge user drop at the Go Premium screen — the biggest single point of failure in the onboarding flow.</div>
+        </div>
+        <div class="cs-finding">
+          <div class="cs-finding-icon">💳</div>
+          <div class="cs-finding-title">Outdated subscription model</div>
+          <div class="cs-finding-text">No trial period, no freemium content — users were asked to pay without experiencing any product value first.</div>
+        </div>
+        <div class="cs-finding">
+          <div class="cs-finding-icon">🌍</div>
+          <div class="cs-finding-title">New market context</div>
+          <div class="cs-finding-text">In established markets, brand awareness carried users through. In new markets, the screen needed to do much more persuasive work.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">02 — Research</div>
+      <h2 class="cs-section-title">The real fix wasn't the screen — it was where it lived.</h2>
+      <div class="cs-two-col">
+        <div>
+          <div class="cs-section-body">
+            <p>We benchmarked multiple apps with similar subscription models — primarily fitness competitors, but also other app categories to explore layout options.</p>
+            <p>The key insight: <em>removing the screen from onboarding entirely</em> would let users experience the product before being asked to pay. Combined with a freemium content strategy, this could fundamentally change the conversion dynamic.</p>
+          </div>
+          <div class="cs-steps" style="margin-top:32px;">
+            <div class="cs-step">
+              <span class="cs-step-num">01</span>
+              <div class="cs-step-content">
+                <div class="cs-step-title">Rethink placement</div>
+                <div class="cs-step-text">Move Go Premium out of onboarding — let users reach the main app screen before encountering a paywall.</div>
+              </div>
+            </div>
+            <div class="cs-step">
+              <span class="cs-step-num">02</span>
+              <div class="cs-step-content">
+                <div class="cs-step-title">Simplify the screen</div>
+                <div class="cs-step-text">Reduce information density, give prominence to Gymondo's value proposition so it resonates in new markets.</div>
+              </div>
+            </div>
+            <div class="cs-step">
+              <span class="cs-step-num">03</span>
+              <div class="cs-step-content">
+                <div class="cs-step-title">Smart free content</div>
+                <div class="cs-step-text">Strategically gate content so users get a taste, then feel motivated to unlock the rest by converting.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    <div class="cs-visual" style="margin-top:48px;">
+      <img src="images/gp-benchmark.jpg" alt="Benchmark — competitor subscription screen research" style="width:100%;display:block;border-radius:16px;" />
+    </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">03 — Challenges</div>
+      <h2 class="cs-section-title">Qualitative and quantitative data were pointing in opposite directions.</h2>
+      <div class="cs-section-body">
+        <p>Two weeks in, the two data sources told different stories. User interviews described the screen as "too expensive" — but Mixpanel showed most users weren't scrolling past the first fold, meaning they weren't even reaching the pricing section. <strong>The real problem was positioning, not price.</strong></p>
+        <p>Aligning the team around this insight — before building anything — was the real design challenge. We also had to make the screen work across six markets with different price points and legal requirements around free trial disclosures, which forced a benefit-led copy approach that deferred specific numbers to a second scroll.</p>
+      </div>
+      <div class="cs-quote">
+        <p>"Too much scroll to explain what Gymondo offers — users in new markets were lost before they even considered paying."</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">04 — Solution</div>
+      <h2 class="cs-section-title">Shorter onboarding. Smarter free content. Better timing.</h2>
+      <div class="cs-section-body">
+        <p>Removing Go Premium from onboarding shortened the flow considerably — users reached the main screen faster and with less friction. The paywall moved to a contextual moment: when a user tried to unlock premium content they'd already engaged with.</p>
+        <p>This shift from <strong>"pay to enter"</strong> to <strong>"pay to unlock more"</strong> fundamentally changed the conversion psychology. An audit of the original screen surfaced compounding issues: fake-looking review badges undermining trust, subscription packages appearing confusingly at the bottom, unclear selected states, and too much scrolling required to understand what Gymondo offered. The redesign addressed all of these simultaneously.</p>
+      </div>
+      <div class="cs-visual" style="margin-top:48px;">
+        <img src="images/gp-userflow.jpg" alt="New user flow — Go Premium removed from onboarding" style="width:100%;display:block;border-radius:16px;" />
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">05 — Testing</div>
+      <h2 class="cs-section-title">Two proposals. Two weeks. One clear winner.</h2>
+      <div class="cs-two-col">
+        <div class="cs-section-body">
+          <p>We built two variants to test against the existing screen. The reason for two proposals was to check whether users responded better to a <strong>video-led approach</strong> (Variant B — less text, more visual) vs. a <strong>copy-led approach</strong> (Variant A — more explanation of Gymondo's value).</p>
+          <p>The A/B test ran for two weeks. <em>Variant B won</em> — even though Variant A was closing the gap by the end, Variant B consistently converted better throughout the entire test period.</p>
+        </div>
+        <div>
+          <div class="cs-steps">
+            <div class="cs-step">
+              <span class="cs-step-num">A</span>
+              <div class="cs-step-content">
+                <div class="cs-step-title">Variant A — Copy-led</div>
+                <div class="cs-step-text">More static, detailed explanation of Gymondo's value proposition. Focused on understanding.</div>
+              </div>
+            </div>
+            <div class="cs-step">
+              <span class="cs-step-num">B</span>
+              <div class="cs-step-content">
+                <div class="cs-step-title">Variant B — Visual-led 🏆</div>
+                <div class="cs-step-text">Video background, less text. Focused on feeling and emotion. Won the test convincingly.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    <div class="cs-visual" style="margin-top:48px;">
+      <img src="images/gp-abtest.jpg" alt="A/B test — Variant A vs Variant B side by side" style="width:100%;display:block;border-radius:16px;" />
+    </div>
+
+    </div>
+  </section>
+
+  <section class="cs-section" style="padding-bottom:0;">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">06 — Results</div>
+      <h2 class="cs-section-title">Significant impact on the bottom line — in every market.</h2>
+      <div class="cs-section-body">
+        <p>The winning screen shipped as a modular component, designed for easy iteration. I worked directly with the iOS and Android engineers to spec the component structure, ensuring it was buildable within existing constraints. Future improvements can be made directly in-app with a permanent A/B test loop — no full redesign needed.</p>
+      </div>
+      <div class="cs-metrics" style="margin-top:48px;">
+        <div class="cs-metric">
+          <div class="cs-metric-val">+17%</div>
+          <div class="cs-metric-label">Conversion rate increase</div>
+        </div>
+        <div class="cs-metric">
+          <div class="cs-metric-val">−52%</div>
+          <div class="cs-metric-label">Drop-off rate in onboarding funnel</div>
+        </div>
+        <div class="cs-metric">
+          <div class="cs-metric-val">2</div>
+          <div class="cs-metric-label">Variants tested over 2 weeks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">07 — Next Steps</div>
+      <h2 class="cs-section-title">The modular component makes iteration fast — here's what's queued.</h2>
+      <div class="cs-next-steps">
+        <div class="cs-next-step">
+          <div class="cs-next-step-num">01</div>
+          <div class="cs-next-step-title">Behavioural trigger testing</div>
+          <div class="cs-next-step-text">Show Go Premium after a user completes their 5th workout or tries to access a premium plan — rather than a time-based trigger. Benchmark data from comparable fitness apps suggests contextual triggers convert at 2–3× the rate of generic prompts.</div>
+        </div>
+        <div class="cs-next-step">
+          <div class="cs-next-step-num">02</div>
+          <div class="cs-next-step-title">Benefit framing variants</div>
+          <div class="cs-next-step-text">Testing video testimonials from real users against the current illustrated benefit blocks, specifically on markets where the conversion uplift was smallest. The modular structure makes this straightforward to run without a full redesign.</div>
+        </div>
+        <div class="cs-next-step">
+          <div class="cs-next-step-num">03</div>
+          <div class="cs-next-step-title">Freemium content calibration</div>
+          <div class="cs-next-step-text">Finding the right ratio of free-to-premium content to maximise both engagement and conversion intent. Too much free content reduces urgency; too little prevents users from experiencing value worth paying for.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT PROJECT -->
+
+  <a href="gymondo-challenges" class="cs-next">
+    <p class="cs-next-label">Next project</p>
+    <div class="cs-next-inner">
+      <div>
+        <div class="cs-next-name">Challenges Feature</div>
+        <div class="cs-next-company">Gymondo</div>
+      </div>
+      <div class="cs-next-arrow">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3 15L15 3M15 3H5M15 3V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <footer class="cs-footer">
+    <p>© 2026 Athul Sudhakaran</p>
+    <p></p>
+  </footer>
+
+  </main>
+
+  <script src="../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+  /* ---- THEME ---- */
+  const html  = document.documentElement;
+  const tBtn  = document.getElementById('themeBtn');
+  const tIcon = document.getElementById('tIcon');
+  const tLbl  = document.getElementById('tLabel');
+  let dark = (localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+  tIcon.textContent  = dark ? '◐' : '◑';
+  tLabel.textContent = dark ? 'Light' : 'Dark';
+  tBtn.addEventListener('click', () => {
+    dark = !dark;
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    tIcon.textContent = dark ? '◐' : '◑';
+    tLbl.textContent  = dark ? 'Light' : 'Dark';
+  });
+
+  /* ---- CURSOR — desktop/mouse only ---- */
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cursorEl = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursorEl.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    });
+    document.addEventListener('mouseleave', () => cursorEl.style.opacity = '0');
+    document.addEventListener('mouseenter', () => cursorEl.style.opacity = '1');
+    document.querySelectorAll('a,button,.cs-finding,.cs-result-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('is-hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('is-hovering'));
+    });
+  }
+
+  /* ---- PRELOADER ---- */
+  const preloader = document.getElementById('preloader');
+  const plTop     = document.getElementById('plTop');
+  const plBot     = document.getElementById('plBot');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      gsap.to(plTop, { yPercent:-100, duration:.5, ease:'power3.inOut' });
+      gsap.to(plBot, { yPercent:100,  duration:.5, ease:'power3.inOut',
+        onComplete: () => { preloader.style.display='none'; initAnim(); }
+      });
+    }, 80);
+  });
+
+  /* ---- ANIMATIONS ---- */
+  gsap.registerPlugin(ScrollTrigger);
+  function initAnim() {
+    // Hero title lines
+    gsap.to('.cs-title .tl span', { y:0, duration:1, stagger:.1, ease:'power3.out', delay:.05 });
+    gsap.to('.cs-meta-strip', { opacity:1, y:0, duration:.7, ease:'power2.out', delay:.6 });
+    gsap.to('.scroll-hint', { opacity:1, duration:.5, delay:1.1 });
+
+    // Scroll-triggered
+    gsap.utils.toArray('.cs-section-title').forEach(el => {
+      gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:.75, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 88%' } });
+    });
+    gsap.utils.toArray('.cs-section-body p').forEach((el,i) => {
+      gsap.fromTo(el, { opacity:0, y:18 }, { opacity:1, y:0, duration:.6, delay:i*.06, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 90%' } });
+    });
+    gsap.utils.toArray('.cs-finding, .cs-step, .cs-result-card').forEach((el,i) => {
+      gsap.fromTo(el, { opacity:0, y:24 }, { opacity:1, y:0, duration:.6, delay:i*.07, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 90%' } });
+    });
+    gsap.utils.toArray('.cs-visual').forEach(el => {
+      gsap.to(el, { opacity:1, y:0, duration:.8, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 85%' } });
+    });
+    gsap.utils.toArray('.cs-metric-val').forEach(el => {
+      gsap.fromTo(el, { opacity:0, y:16 }, { opacity:1, y:0, duration:.7, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 88%' } });
+    });
+    gsap.utils.toArray('.cs-quote').forEach(el => {
+      gsap.fromTo(el, { opacity:0, x:-20 }, { opacity:1, x:0, duration:.7, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 88%' } });
+    });
+  }
+
+  /* ---- NAV SCROLL ---- */
+  const navEl = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive:true });
+</script>
+</body>
+
+<!-- Mirrored from dvdrod.com/gymondo-premium by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Jun 2026 05:31:00 GMT -->
+</html>

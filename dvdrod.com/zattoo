@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from dvdrod.com/zattoo by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Jun 2026 05:31:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5DGNJQL76"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C5DGNJQL76');
+  </script>
+  <script>(function(){var s=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',s?s:(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));}());</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <title>Android TV Platform — David Rodriguez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&amp;display=swap" rel="stylesheet"/>
+  <style>
+    /* ============================================
+       VARIABLES & THEMES
+    ============================================ */
+    :root {
+      --bg:        #0C0C0B;
+      --bg2:       #141413;
+      --fg:        #EDEDE8;
+      --muted:     #93938F;
+      --border:    rgba(237,237,232,0.09);
+      --accent:    #FF3D00;
+      --radius:    14px;
+      --transition: 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    [data-theme="light"] {
+      --bg:  #F0EDE5; --bg2: #E8E5DD;
+      --fg:  #0C0C0B;
+      --muted:  #5B5A57;
+      --border: rgba(12,12,11,0.1);
+      --accent: #FF3D00;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
+    @media (pointer: coarse) {
+      *, *::before, *::after { cursor: auto !important; }
+      body { cursor: auto; }
+      .cursor { display: none !important; }
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--fg);
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* Noise */
+    body::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9997;
+      opacity:0.028;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* ── CURSOR ── */
+    .cursor { position:fixed; top:0; left:0; pointer-events:none; z-index:9999; will-change:transform; opacity:0; }
+
+    @keyframes pill-bounce {
+      0%   { transform: scale(1,1); }
+      18%  { transform: scale(1.14,0.86); }
+      38%  { transform: scale(0.93,1.07); }
+      58%  { transform: scale(1.05,0.96); }
+      78%  { transform: scale(0.98,1.02); }
+      100% { transform: scale(1,1); }
+    }
+    .cursor-arrow { position:absolute; top:0; left:0; width:22px; height:26px;
+      filter:drop-shadow(0 1px 3px rgba(0,0,0,.45));
+      transition:transform .2s cubic-bezier(.25,.46,.45,.94); }
+    .cursor-arrow svg { display:block; }
+    .cursor-label {
+      position:absolute; top:18px; left:16px;
+      background:#1A1A19; color:#EDEDE8;
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:600;
+      letter-spacing:.04em; padding:4px 10px 4px 8px;
+      border-radius:100px; white-space:nowrap;
+      display:flex; align-items:center; gap:5px;
+      box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.07);
+      transition:background .25s ease,transform .2s cubic-bezier(.25,.46,.45,.94);
+    }
+    .cursor-label-dot { width:6px; height:6px; border-radius:50%; background:#FF3D00; flex-shrink:0; }
+    body.is-hovering .cursor-arrow { transform:rotate(-12deg) scale(.92); }
+    body.is-hovering .cursor-label { background:#FF3D00; color:#fff; animation:pill-bounce 0.42s cubic-bezier(.36,.07,.19,.97); }
+    body.is-hovering .cursor-label-dot { background:rgba(255,255,255,.6); }
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:200;
+      padding:22px 44px; display:flex; justify-content:space-between; align-items:center;
+      transition:padding .45s cubic-bezier(.4,0,.2,1), top .45s cubic-bezier(.4,0,.2,1),
+        left .45s cubic-bezier(.4,0,.2,1), right .45s cubic-bezier(.4,0,.2,1),
+        border-radius .45s cubic-bezier(.4,0,.2,1), background .4s ease,
+        backdrop-filter .4s ease, box-shadow .4s ease;
+    }
+    nav.scrolled {
+      top:16px; left:5%; right:5%; padding:14px 28px; border-radius:100px;
+      background:rgba(12,12,11,.80);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      box-shadow:0 4px 24px rgba(0,0,0,.25), inset 0 0 0 1px rgba(237,237,232,.08);
+    }
+    [data-theme="light"] nav.scrolled {
+      background:rgba(240,237,229,.85);
+      box-shadow:0 4px 24px rgba(0,0,0,.10), inset 0 0 0 1px rgba(12,12,11,.08);
+    }
+    .nav-logo { font-family:'Syne',sans-serif; font-size:15px; font-weight:800; letter-spacing:-.02em; }
+    .nav-right { display:flex; align-items:center; gap:28px; }
+    .nav-back {
+      display:flex; align-items:center; gap:8px;
+      font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+      transition:color .3s;
+    }
+    .nav-back:hover { color:var(--fg); }
+    .nav-back svg { transition:transform .3s ease; }
+    .nav-back:hover svg { transform:translateX(-3px); }
+    .theme-btn {
+      display:flex; align-items:center; gap:7px;
+      background:none; border:1px solid var(--border); border-radius:100px;
+      padding:7px 15px; color:var(--muted);
+      font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+      transition:all .3s ease;
+    }
+    .theme-btn:hover { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+
+    /* ── PRELOADER ── */
+    #preloader {
+      position:fixed; inset:0; background:var(--bg); z-index:9000;
+      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:20px;
+    }
+    .pl-name { font-family:'Syne',sans-serif; font-size:clamp(24px,4vw,52px); text-align:center;
+      font-weight:800; letter-spacing:-.045em; overflow:hidden; }
+    .pl-name span { display:inline-block; transform:translateY(110%); }
+    .pl-bar-wrap { width:120px; height:1px; background:var(--border); overflow:hidden; }
+    .pl-bar { height:100%; width:0; background:var(--fg); transition:width .9s cubic-bezier(.76,0,.24,1); }
+
+    /* ── CASE STUDY: HERO ── */
+    .cs-hero {
+      min-height:100svh; padding:0 44px 60px;
+      display:flex; flex-direction:column; justify-content:flex-end;
+      position:relative; overflow:hidden;
+    }
+    .cs-hero-bg {
+      position:absolute; inset:0; z-index:0;
+      opacity:.18;
+      transition:opacity .6s ease;
+    }
+    .cs-hero-blob {
+      position:absolute; border-radius:50%; filter:blur(80px); opacity:.35;
+    }
+    .cs-breadcrumb {
+      position:relative; z-index:1;
+      font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--muted); margin-bottom:20px; overflow:hidden;
+    }
+    .cs-breadcrumb span { display:inline-block; transform:translateY(110%); }
+    .cs-hero-number {
+      position:absolute; top:50%; right:44px; transform:translateY(-50%);
+      font-family:'Inter',sans-serif; font-size:clamp(100px,16vw,220px);
+      font-weight:800; letter-spacing:-.05em; line-height:1;
+      color:transparent; -webkit-text-stroke:1px var(--border);
+      pointer-events:none; user-select:none; z-index:0;
+    }
+    .cs-title-wrap { position:relative; z-index:1; margin-bottom:48px; }
+    .cs-company { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+    .cs-title {
+      font-family:'Inter',sans-serif;
+      font-size:clamp(52px,9vw,130px);
+      font-weight:800; letter-spacing:-.045em; line-height:.9;
+    }
+    .cs-title .tl { overflow:hidden; display:block; }
+    .cs-title .tl span { display:block; transform:translateY(110%); }
+
+    .cs-meta-strip {
+      position:relative; z-index:1;
+      display:flex; gap:0; border:1px solid var(--border); border-radius:12px;
+      overflow:hidden; max-width:700px; opacity:0; transform:translateY(20px);
+    }
+    .cs-meta-item {
+      flex:1; padding:16px 20px; border-right:1px solid var(--border);
+    }
+    .cs-meta-item:last-child { border-right:none; }
+    .cs-meta-label { font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+    .cs-meta-value { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:-.01em; }
+
+    /* ── CASE STUDY: SECTIONS ── */
+    .cs-section { padding:100px 44px; border-top:1px solid var(--border); }
+    .cs-section-inner { max-width:1200px; margin:0 auto; }
+    .cs-section-label {
+      font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:10px;
+    }
+    .cs-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .cs-section-title {
+      font-family:'Inter',sans-serif;
+      font-size:clamp(32px,4.5vw,60px);
+      font-weight:800; letter-spacing:-.035em; line-height:1.05;
+      margin-bottom:32px; max-width:760px;
+    }
+    .cs-section-body { max-width:640px; }
+    .cs-section-body p {
+      font-size:17px; line-height:1.7; font-weight:300; color:var(--fg);
+      margin-bottom:20px;
+    }
+    .cs-section-body p:last-child { margin-bottom:0; }
+    .cs-section-body strong { font-weight:600; }
+    .cs-section-body em { font-style:normal; color:var(--accent); }
+
+    /* Two-col layout */
+    .cs-two-col { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; margin-top:48px; }
+    .cs-two-col.reverse { direction:rtl; }
+    .cs-two-col.reverse > * { direction:ltr; }
+
+    /* Finding cards */
+    .cs-findings { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:48px; }
+    .cs-finding {
+      background:var(--bg2); border:1px solid var(--border); border-radius:12px;
+      padding:28px; transition:border-color .3s;
+    }
+    .cs-finding:hover { border-color:rgba(237,237,232,.25); }
+    .cs-finding-icon { font-size:22px; margin-bottom:12px; }
+    .cs-finding-title { font-family:'Inter',sans-serif; font-size:16px; font-weight:700; margin-bottom:8px; }
+    .cs-finding-text { font-size:13px; color:var(--muted); line-height:1.6; }
+
+    /* Steps list */
+    .cs-steps { display:flex; flex-direction:column; gap:0; margin-top:40px; }
+    .cs-step {
+      display:flex; gap:24px; padding:20px 0; border-bottom:1px solid var(--border);
+      align-items:baseline;
+    }
+    .cs-step-num {
+      font-family:'Inter',sans-serif; font-size:11px; font-weight:700;
+      color:var(--muted); letter-spacing:.08em; flex-shrink:0; width:28px;
+    }
+    .cs-step-content { flex:1; }
+    .cs-step-title { font-family:'Inter',sans-serif; font-size:17px; font-weight:700; margin-bottom:6px; }
+    .cs-step-text { font-size:14px; color:var(--muted); line-height:1.6; }
+
+    /* ── METRICS BAND ── */
+    .cs-metrics {
+      display:flex; gap:0; border:1px solid var(--border); border-radius:16px;
+      overflow:hidden; margin-top:60px;
+    }
+    .cs-metric {
+      flex:1; padding:40px 32px; border-right:1px solid var(--border); text-align:center;
+    }
+    .cs-metric:last-child { border-right:none; }
+    .cs-metric-val {
+      font-family:'Inter',sans-serif; font-size:clamp(40px,5vw,64px);
+      font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1;
+      margin-bottom:8px;
+    }
+    .cs-metric-label { font-size:12px; color:var(--muted); line-height:1.5; max-width:160px; margin:0 auto; }
+
+    /* ── VISUAL PLACEHOLDERS ── */
+    .cs-visual {
+      border-radius:16px; overflow:hidden; position:relative;
+      opacity:0; transform:translateY(24px);
+    }
+    .cs-visual.full { aspect-ratio:16/8; margin-top:64px; }
+    .cs-visual.tall { aspect-ratio:4/5; }
+    .cs-visual.wide { aspect-ratio:16/9; }
+    .cs-visual.square { aspect-ratio:1; }
+    .cs-visual-inner {
+      width:100%; height:100%; position:relative;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .cs-visual-label {
+      position:absolute; bottom:20px; left:20px;
+      font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+      color:rgba(255,255,255,.25); z-index:2;
+    }
+    /* Mockup shapes inside visual */
+    .mock-screens {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:16px;
+    }
+    .mock-screen {
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+      border-radius:12px; position:relative; overflow:hidden;
+    }
+    .mock-screen::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.05) 0%, transparent 100%);
+    }
+    /* Simulated UI lines inside mockups */
+    .mock-line {
+      position:absolute; height:6px; background:rgba(255,255,255,.12); border-radius:3px;
+    }
+
+    /* ── NEXT PROJECT ── */
+    .cs-next {
+      display:block; padding:80px 44px;
+      margin-top:80px;
+      border-top:1px solid var(--border);
+      background:var(--bg2);
+      transition:background .3s;
+      text-decoration:none;
+    }
+    .cs-next:hover { background:var(--bg); }
+    .cs-next-label { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+    .cs-next-inner { display:flex; justify-content:space-between; align-items:center; gap:24px; }
+    .cs-next-name {
+      font-family:'Inter',sans-serif; font-size:clamp(32px,5vw,72px);
+      font-weight:800; letter-spacing:-.04em; line-height:.95;
+      transition:color .3s;
+    }
+    .cs-next:hover .cs-next-name { color:var(--accent); }
+    .cs-next-company { font-size:13px; color:var(--muted); margin-top:8px; }
+    .cs-next-arrow {
+      width:64px; height:64px; border:1px solid var(--border); border-radius:50%;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0;
+      transition:all .35s ease;
+    }
+    .cs-next:hover .cs-next-arrow { background:var(--accent); border-color:var(--accent); transform:rotate(45deg); }
+    .cs-next:hover .cs-next-arrow svg path { stroke:#fff; }
+
+    /* ── QUOTE CALLOUT ── */
+    .cs-quote {
+      margin:60px 0; padding:40px 44px; border-left:3px solid var(--accent);
+      background:var(--bg2); border-radius:0 12px 12px 0;
+    }
+    .cs-quote p {
+      font-family:'Inter',sans-serif; font-size:clamp(20px,2.5vw,30px);
+      font-weight:700; letter-spacing:-.02em; line-height:1.35; color:var(--fg);
+    }
+
+    /* ── RESULT HIGHLIGHT ── */
+    .cs-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:40px; }
+    .cs-result-card {
+      background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:32px;
+    }
+    .cs-result-val {
+      font-family:'Inter',sans-serif; font-size:clamp(36px,4.5vw,56px);
+      font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; margin-bottom:10px;
+    }
+    .cs-result-label { font-size:13px; color:var(--muted); line-height:1.5; }
+
+    /* ── FOOTER ── */
+    .cs-footer {
+      padding:24px 44px; border-top:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .cs-footer p { font-size:12px; color:var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:900px) {
+      nav { padding:18px 24px; }
+      nav.scrolled { top:12px; left:16px; right:16px; padding:12px 20px; }
+      .cs-hero { padding:0 24px 48px; }
+      .cs-section { padding:72px 24px; }
+      .cs-two-col { grid-template-columns:1fr; gap:40px; }
+      .cs-two-col.reverse { direction:ltr; }
+      .cs-findings { grid-template-columns:1fr; }
+      .cs-result-grid { grid-template-columns:1fr; }
+      .cs-metrics { flex-direction:column; }
+      .cs-metric { border-right:none; border-bottom:1px solid var(--border); }
+      .cs-metric:last-child { border-bottom:none; }
+      .cs-hero-number { display:none; }
+      .cs-meta-strip { flex-wrap:wrap; }
+      .cs-meta-item { min-width:50%; border-right:none; border-bottom:1px solid var(--border); }
+      .cs-footer { flex-direction:column; gap:12px; text-align:center; }
+    }
+</style>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body>
+
+  <div id="preloader" aria-hidden="true">
+    <div class="pl-name"><span>Zattoo</span></div>
+    <div class="pl-bar-wrap"><div class="pl-bar" id="plBar"></div></div>
+  </div>
+
+  
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor-arrow">
+      <svg width="22" height="26" viewBox="0 0 22 26" fill="none">
+        <path d="M2 2L2 21L6.8 16.2L10.4 24L13.4 22.6L9.8 14.8L17 14.8L2 2Z"
+              fill="white" stroke="#0C0C0B" stroke-width="1.4"
+              stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="cursor-label">
+      <span class="cursor-label-dot"></span>
+            <span>Guest</span>
+    </div>
+  </div>
+
+  
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">dvdrod</a>
+    <div class="nav-right">
+      <a href="index.html#work" class="nav-back">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M10 2L4 7L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to work
+      </a>
+      <button class="theme-btn" id="themeBtn">
+        <span id="tIcon">◐</span><span id="tLabel">Light</span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="cs-hero-bg" style="background:linear-gradient(145deg,#1A0A00,#CC5500);"></div>
+    <div class="cs-hero-blob" style="width:500px;height:500px;top:-100px;right:-100px;background:#CC5500;"></div>
+    <div class="cs-hero-blob" style="width:300px;height:300px;bottom:60px;left:-80px;background:#1A0A00;opacity:.2;"></div>
+    <span class="cs-hero-number">04</span>
+
+    <div class="cs-breadcrumb"><span>Portfolio → Work</span></div>
+
+    <div class="cs-title-wrap">
+      <p class="cs-company">Zattoo</p>
+      <h1 class="cs-title">
+        <span class="tl"><span>Android TV</span></span><span class="tl"><span>Platform</span></span>
+      </h1>
+    </div>
+
+    <div class="cs-meta-strip">
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Role</div>
+        <div class="cs-meta-value">Product Designer</div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Year</div>
+        <div class="cs-meta-value">2023 — 2025</div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Location</div>
+        <div class="cs-meta-value">Berlin, Germany</div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-label">Type</div>
+        <div class="cs-meta-value">TV Platform · Design System</div>
+      </div>
+    </div>
+
+    
+    <div class="scroll-hint" style="position:absolute;bottom:56px;right:44px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;pointer-events:none;" aria-hidden="true">
+      <div style="width:1px;height:64px;background:var(--border);position:relative;overflow:hidden;">
+        <style>.sh-anim::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--accent);animation:shln 2.4s ease infinite;}@keyframes shln{0%{top:-100%}100%{top:100%}}</style>
+        <div class="sh-anim" style="width:100%;height:100%;"></div>
+      </div>
+      <span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-lr;">Scroll</span>
+    </div>
+
+  </section>
+
+  
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">01 — Context</div>
+      <h2 class="cs-section-title">Two Android TV teams. Two products. One designer to bridge them.</h2>
+      <div class="cs-section-body">
+        <p>Zattoo is a live TV streaming platform offering access to hundreds of channels across Europe — available on smart TVs, set-top boxes, mobile, and web. When I joined, the design team needed someone to lead across two distinct Android TV teams simultaneously.</p>
+        <p>The challenge was managing <strong>D2C (direct-to-consumer)</strong> and <strong>B2B (white-label for operators)</strong> products that shared architecture but served very different user expectations — all while a significant platform migration from native Android to React was underway.</p>
+      </div>
+      
+    <div class="cs-visual full" style="margin-top:60px;">
+      <div class="cs-visual-inner" style="background:linear-gradient(145deg,#1A0A00,#CC5500);">
+        <div style="position:absolute;width:320px;height:320px;border-radius:50%;background:#F97316;opacity:0.22;filter:blur(0px);pointer-events:none;top:-60px;right:-60px;"></div><div style="position:absolute;width:200px;height:200px;border-radius:50%;background:#FED7AA;opacity:0.1;filter:blur(0px);pointer-events:none;bottom:30px;left:40px;"></div>
+        
+      <div style="position:absolute;width:60%;height:8px;background:rgba(255,255,255,.1);border-radius:4px;top:38%;left:20%;"></div>
+      <div style="position:absolute;width:40%;height:8px;background:rgba(255,255,255,.07);border-radius:4px;top:48%;left:20%;"></div>
+      <div style="position:absolute;width:25%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;top:57%;left:20%;"></div>
+    
+        <div class="cs-visual-label">Zattoo TV platform — primary interface</div>
+      </div>
+    </div>
+
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">02 — Responsibilities</div>
+      <h2 class="cs-section-title">Design leadership across platforms, products, and a migration.</h2>
+      <div class="cs-findings">
+        <div class="cs-finding">
+          <div class="cs-finding-icon">📺</div>
+          <div class="cs-finding-title">TV Platform Design Lead</div>
+          <div class="cs-finding-text">Led design efforts for two Android TV teams — D2C consumer product and B2B white-label products — ensuring alignment despite different product contexts.</div>
+        </div>
+        <div class="cs-finding">
+          <div class="cs-finding-icon">🧩</div>
+          <div class="cs-finding-title">Design System Contributions</div>
+          <div class="cs-finding-text">Created design documentation and introduced new components to the design system as feature work required — maintaining consistency across the growing platform.</div>
+        </div>
+        <div class="cs-finding">
+          <div class="cs-finding-icon">⚛️</div>
+          <div class="cs-finding-title">React Migration Support</div>
+          <div class="cs-finding-text">Supported the product migration from native Android platforms to React, maintaining design consistency and advocating for quality throughout the transition.</div>
+        </div>
+        <div class="cs-finding">
+          <div class="cs-finding-icon">🤝</div>
+          <div class="cs-finding-title">Cross-functional Collaboration</div>
+          <div class="cs-finding-text">Worked with PMs and engineers to align design strategy with business goals — ensuring user-centred decisions informed the roadmap.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">03 — D2C Product</div>
+      <h2 class="cs-section-title">Consumer TV: familiar, fast, and made for the couch.</h2>
+      <div class="cs-two-col">
+        <div class="cs-section-body">
+          <p>The D2C product serves everyday TV watchers who want live channels, catch-up content, and recordings — all in one place. Design decisions needed to feel <strong>instantly intuitive</strong> on a 10-foot screen, navigated entirely with a remote.</p>
+          <p>Key focus areas included improving content discovery, refining the EPG (Electronic Programme Guide) interaction model, and ensuring the UI could accommodate both lean-back browsing and active searching — two very different modes of use.</p>
+        </div>
+        
+    <div class="cs-visual tall" style="">
+      <div class="cs-visual-inner" style="background:linear-gradient(145deg,#1A0800,#883300);">
+        <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:#EA580C;opacity:0.28;filter:blur(0px);pointer-events:none;top:-20px;right:-20px;"></div><div style="position:absolute;width:130px;height:130px;border-radius:50%;background:#FED7AA;opacity:0.12;filter:blur(0px);pointer-events:none;bottom:20px;left:20px;"></div>
+        
+      <div style="position:absolute;width:60%;height:8px;background:rgba(255,255,255,.1);border-radius:4px;top:38%;left:20%;"></div>
+      <div style="position:absolute;width:40%;height:8px;background:rgba(255,255,255,.07);border-radius:4px;top:48%;left:20%;"></div>
+      <div style="position:absolute;width:25%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;top:57%;left:20%;"></div>
+    
+        <div class="cs-visual-label">D2C consumer TV UI</div>
+      </div>
+    </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">04 — B2B Product</div>
+      <h2 class="cs-section-title">White-label TV: flexible enough for operators, consistent enough to trust.</h2>
+      <div class="cs-two-col reverse">
+        
+    <div class="cs-visual tall" style="">
+      <div class="cs-visual-inner" style="background:linear-gradient(145deg,#140800,#662800);">
+        <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:#C2410C;opacity:0.25;filter:blur(0px);pointer-events:none;top:-20px;left:-20px;"></div><div style="position:absolute;width:130px;height:130px;border-radius:50%;background:#FDBA74;opacity:0.1;filter:blur(0px);pointer-events:none;bottom:20px;right:20px;"></div>
+        
+      <div style="position:absolute;width:60%;height:8px;background:rgba(255,255,255,.1);border-radius:4px;top:38%;left:20%;"></div>
+      <div style="position:absolute;width:40%;height:8px;background:rgba(255,255,255,.07);border-radius:4px;top:48%;left:20%;"></div>
+      <div style="position:absolute;width:25%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;top:57%;left:20%;"></div>
+    
+        <div class="cs-visual-label">B2B white-label operator product</div>
+      </div>
+    </div>
+
+        <div class="cs-section-body">
+          <p>The B2B product serves telecoms operators who white-label Zattoo's platform for their own subscriber base. This meant designing components flexible enough to accommodate <strong>operator branding and content variation</strong> while maintaining a coherent user experience.</p>
+          <p>Close collaboration with the engineering team was essential — understanding where theming was possible in the React architecture directly informed which design decisions were viable at scale.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs-section">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">05 — Platform Migration</div>
+      <h2 class="cs-section-title">Native to React — keeping the experience intact through the transition.</h2>
+      <div class="cs-section-body">
+        <p>Migrating a live TV product from native Android to React is a significant engineering undertaking — and one that carries real risk of design regression. Animations feel different. Layouts can shift. Timing changes.</p>
+        <p>I worked closely with engineers throughout the migration to <em>identify and resolve design inconsistencies</em> before they reached users, and contributed updated component specs to the design system to reflect the new platform constraints and capabilities.</p>
+      </div>
+      <div class="cs-quote" style="margin-top:40px;">
+        <p>"The migration wasn't just a tech project — it was a design quality project. Every screen was an opportunity to improve, not just replicate."</p>
+      </div>
+      
+    <div class="cs-visual full" style="margin-top:48px;">
+      <div class="cs-visual-inner" style="background:linear-gradient(145deg,#1A0A00,#994400);">
+        <div style="position:absolute;width:280px;height:280px;border-radius:50%;background:#F97316;opacity:0.2;filter:blur(0px);pointer-events:none;top:-50px;right:-50px;"></div><div style="position:absolute;width:160px;height:160px;border-radius:50%;background:#FED7AA;opacity:0.1;filter:blur(0px);pointer-events:none;bottom:40px;left:60px;"></div>
+        
+      <div style="position:absolute;width:60%;height:8px;background:rgba(255,255,255,.1);border-radius:4px;top:38%;left:20%;"></div>
+      <div style="position:absolute;width:40%;height:8px;background:rgba(255,255,255,.07);border-radius:4px;top:48%;left:20%;"></div>
+      <div style="position:absolute;width:25%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;top:57%;left:20%;"></div>
+    
+        <div class="cs-visual-label">Platform before/after migration comparison</div>
+      </div>
+    </div>
+
+    </div>
+  </section>
+
+  <section class="cs-section" style="padding-bottom:0;">
+    <div class="cs-section-inner">
+      <div class="cs-section-label">06 — Impact</div>
+      <h2 class="cs-section-title">Two years. Two teams. One consistent product experience.</h2>
+      <div class="cs-result-grid" style="margin-top:40px;">
+        <div class="cs-result-card">
+          <div class="cs-result-val">D2C + B2B</div>
+          <div class="cs-result-label">Two product streams led simultaneously — consumer and white-label</div>
+        </div>
+        <div class="cs-result-card">
+          <div class="cs-result-val">React</div>
+          <div class="cs-result-label">Full platform migration from native Android — design consistency maintained throughout</div>
+        </div>
+        <div class="cs-result-card">
+          <div class="cs-result-val">2yr</div>
+          <div class="cs-result-label">Embedded design leadership across both Android TV teams, Jan 2023 – Jul 2025</div>
+        </div>
+        <div class="cs-result-card">
+          <div class="cs-result-val">∞</div>
+          <div class="cs-result-label">Design system components introduced — every new feature expanded the shared library</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- NEXT PROJECT -->
+  
+  <a href="neotaste-onboarding" class="cs-next">
+    <p class="cs-next-label">Next project</p>
+    <div class="cs-next-inner">
+      <div>
+        <div class="cs-next-name">Onboarding Redesign</div>
+        <div class="cs-next-company">NeoTaste</div>
+      </div>
+      <div class="cs-next-arrow">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M3 15L15 3M15 3H5M15 3V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </a>
+
+  <footer class="cs-footer">
+    <p>© 2026 David Rodriguez</p>
+    <p><a href="gymondo-challenges" style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:color .3s;display:flex;align-items:center;gap:6px;" onmouseenter="this.style.color='var(--fg)'" onmouseleave="this.style.color='var(--muted)'">← Prev</a></p>
+  </footer>
+
+  </main>
+
+  <script src="../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+  /* ---- THEME ---- */
+  const html  = document.documentElement;
+  const tBtn  = document.getElementById('themeBtn');
+  const tIcon = document.getElementById('tIcon');
+  const tLbl  = document.getElementById('tLabel');
+  let dark = (localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+  tIcon.textContent  = dark ? '◐' : '◑';
+  tLabel.textContent = dark ? 'Light' : 'Dark';
+  tBtn.addEventListener('click', () => {
+    dark = !dark;
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    tIcon.textContent = dark ? '◐' : '◑';
+    tLbl.textContent  = dark ? 'Light' : 'Dark';
+  });
+
+  /* ---- CURSOR — desktop/mouse only ---- */
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cursorEl = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursorEl.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    });
+    document.addEventListener('mouseleave', () => cursorEl.style.opacity = '0');
+    document.addEventListener('mouseenter', () => cursorEl.style.opacity = '1');
+    document.querySelectorAll('a,button,.cs-finding,.cs-result-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('is-hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('is-hovering'));
+    });
+  }
+
+  /* ---- PRELOADER ---- */
+  const preloader = document.getElementById('preloader');
+  const plBar     = document.getElementById('plBar');
+  const plSpan    = document.querySelector('.pl-name span');
+  gsap.to(plSpan, { y:0, duration:.7, ease:'power3.out', delay:.1 });
+  window.addEventListener('load', () => {
+    setTimeout(() => { plBar.style.width = '100%'; }, 150);
+    setTimeout(() => {
+      gsap.to(preloader, { yPercent:-100, duration:.85, ease:'power3.inOut',
+        onComplete: () => { preloader.style.display='none'; initAnim(); }
+      });
+    }, 1200);
+  });
+
+  /* ---- ANIMATIONS ---- */
+  gsap.registerPlugin(ScrollTrigger);
+  function initAnim() {
+    // Hero title lines
+    gsap.to('.cs-title .tl span', { y:0, duration:1, stagger:.1, ease:'power3.out', delay:.05 });
+    gsap.to('.cs-breadcrumb span', { y:0, duration:.75, ease:'power3.out', delay:.4 });
+    gsap.to('.cs-meta-strip', { opacity:1, y:0, duration:.7, ease:'power2.out', delay:.6 });
+    gsap.to('.scroll-hint', { opacity:1, duration:.5, delay:1.1 });
+
+    // Scroll-triggered
+    gsap.utils.toArray('.cs-section-title').forEach(el => {
+      gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:.75, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 88%' } });
+    });
+    gsap.utils.toArray('.cs-section-body p').forEach((el,i) => {
+      gsap.fromTo(el, { opacity:0, y:18 }, { opacity:1, y:0, duration:.6, delay:i*.06, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 90%' } });
+    });
+    gsap.utils.toArray('.cs-finding, .cs-step, .cs-result-card').forEach((el,i) => {
+      gsap.fromTo(el, { opacity:0, y:24 }, { opacity:1, y:0, duration:.6, delay:i*.07, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 90%' } });
+    });
+    gsap.utils.toArray('.cs-visual').forEach(el => {
+      gsap.to(el, { opacity:1, y:0, duration:.8, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 85%' } });
+    });
+    gsap.utils.toArray('.cs-metric-val').forEach(el => {
+      gsap.fromTo(el, { opacity:0, y:16 }, { opacity:1, y:0, duration:.7, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 88%' } });
+    });
+    gsap.utils.toArray('.cs-quote').forEach(el => {
+      gsap.fromTo(el, { opacity:0, x:-20 }, { opacity:1, x:0, duration:.7, ease:'power2.out',
+        scrollTrigger: { trigger:el, start:'top 88%' } });
+    });
+  }
+
+  /* ---- NAV SCROLL ---- */
+  const navEl = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive:true });
+</script>
+</body>
+
+<!-- Mirrored from dvdrod.com/zattoo by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Jun 2026 05:31:02 GMT -->
+</html>

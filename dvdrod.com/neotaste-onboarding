@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from dvdrod.com/neotaste-onboarding by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Jun 2026 05:31:02 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C5DGNJQL76"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C5DGNJQL76');
+  </script>
+  <script>(function(){var s=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',s?s:(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));}());</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <title>Onboarding Redesign — NeoTaste × David Rodriguez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&amp;display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <style>
+    :root {
+      --bg:#0C0C0B; --bg2:#141413; --fg:#EDEDE8;
+      --muted:#93938F; --border:rgba(237,237,232,0.09);
+      --accent:#FF6B35; --radius:14px;
+      --transition:0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    [data-theme="light"] {
+      --bg:#F0EDE5; --bg2:#E8E5DD; --fg:#0C0C0B;
+      --muted:#5B5A57; --border:rgba(12,12,11,0.1); --accent:#E85A1F;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; cursor:none !important; }
+    @media (pointer:coarse) {
+      *, *::before, *::after { cursor:auto !important; }
+      body { cursor:auto; }
+      .cursor { display:none !important; }
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--fg); overflow-x:hidden; transition:background var(--transition),color var(--transition); }
+    a { color:inherit; text-decoration:none; }
+    img { display:block; max-width:100%; }
+    ul { list-style:none; }
+    body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:9997; opacity:0.028; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
+
+    /* CURSOR */
+    .cursor { position:fixed; top:0; left:0; pointer-events:none; z-index:9999; will-change:transform; opacity:0; }
+
+    @keyframes pill-bounce {
+      0%   { transform: scale(1,1); }
+      18%  { transform: scale(1.14,0.86); }
+      38%  { transform: scale(0.93,1.07); }
+      58%  { transform: scale(1.05,0.96); }
+      78%  { transform: scale(0.98,1.02); }
+      100% { transform: scale(1,1); }
+    }
+    .cursor-arrow { position:absolute; top:0; left:0; width:22px; height:26px; filter:drop-shadow(0 1px 3px rgba(0,0,0,.45)); transition:transform .2s cubic-bezier(.25,.46,.45,.94); }
+    .cursor-arrow svg { display:block; }
+    .cursor-label { position:absolute; top:18px; left:16px; background:#1A1A19; color:#EDEDE8; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; letter-spacing:.04em; padding:4px 10px 4px 8px; border-radius:100px; white-space:nowrap; display:flex; align-items:center; gap:5px; box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.07); transition:background .25s ease,transform .2s cubic-bezier(.25,.46,.45,.94); }
+    .cursor-label-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+    body.is-hovering .cursor-arrow { transform:rotate(-12deg) scale(.92); }
+    body.is-hovering .cursor-label { background:var(--accent); color:#fff; animation:pill-bounce 0.42s cubic-bezier(.36,.07,.19,.97); }
+    body.is-hovering .cursor-label-dot { background:rgba(255,255,255,.6); }
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:22px 44px; display:flex; justify-content:space-between; align-items:center; transition:padding .45s cubic-bezier(.4,0,.2,1),top .45s cubic-bezier(.4,0,.2,1),left .45s cubic-bezier(.4,0,.2,1),right .45s cubic-bezier(.4,0,.2,1),border-radius .45s cubic-bezier(.4,0,.2,1),background .4s ease,backdrop-filter .4s ease,box-shadow .4s ease; }
+    nav.scrolled { top:16px; left:44px; right:44px; padding:14px 28px; border-radius:100px; background:rgba(12,12,11,.80); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); box-shadow:0 4px 24px rgba(0,0,0,.25); }
+    [data-theme="light"] nav.scrolled { background:rgba(240,237,229,.85); box-shadow:0 4px 24px rgba(0,0,0,.10); }
+    .nav-logo { font-family:'Syne',sans-serif; font-size:15px; font-weight:800; letter-spacing:-.02em; }
+    .nav-right { display:flex; align-items:center; gap:28px; }
+    .theme-btn { display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--border); border-radius:100px; padding:7px 15px; color:var(--muted); font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.08em; text-transform:uppercase; transition:all .3s ease; }
+    .theme-btn:hover { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+
+    /* PRELOADER */
+    #preloader { position:fixed; inset:0; z-index:9000; display:flex; flex-direction:column; pointer-events:none; }
+    .pl-panel { flex:1; background:var(--bg); }
+
+    /* CASE STUDY: HERO */
+    .cs-hero { min-height:100svh; padding:0 44px max(60px,calc(60px + env(safe-area-inset-bottom))); display:flex; flex-direction:column; justify-content:flex-end; position:relative; overflow:hidden; }
+    .cs-hero-bg { position:absolute; inset:0; z-index:0; opacity:.18; }
+    .cs-hero-blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:.35; }
+    .cs-hero-number { position:absolute; top:50%; right:44px; transform:translateY(-50%); font-family:'Syne',sans-serif; font-size:clamp(100px,16vw,220px); font-weight:800; letter-spacing:-.05em; line-height:1; color:transparent; -webkit-text-stroke:1px var(--border); pointer-events:none; user-select:none; z-index:0; }
+    .cs-title-wrap { position:relative; z-index:1; margin-bottom:48px; }
+    .cs-company { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+    .cs-title { font-family:'Syne',sans-serif; font-size:clamp(52px,9vw,130px); font-weight:800; letter-spacing:-.045em; line-height:.9; }
+    .cs-title .tl { overflow:hidden; display:block; }
+    .cs-title .tl span { display:block; transform:translateY(110%); }
+    .cs-meta-strip { position:relative; z-index:1; display:flex; gap:0; border:1px solid var(--border); border-radius:12px; overflow:hidden; max-width:700px; opacity:0; transform:translateY(20px); }
+    .cs-meta-item { flex:1; padding:16px 20px; border-right:1px solid var(--border); }
+    .cs-meta-item:last-child { border-right:none; }
+    .cs-meta-label { font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+    .cs-meta-value { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:-.01em; }
+
+    /* SECTIONS */
+    .cs-section { padding:100px 44px; border-top:1px solid var(--border); }
+    .cs-section-inner { max-width:1200px; margin:0 auto; }
+    .cs-section-label { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+    .cs-section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+    .cs-section-title { font-family:'Inter',sans-serif; font-size:clamp(32px,4.5vw,60px); font-weight:800; letter-spacing:-.035em; line-height:1.05; margin-bottom:32px; max-width:760px; }
+    .cs-section-body { max-width:640px; }
+    .cs-section-body p { font-size:17px; line-height:1.7; font-weight:300; color:var(--fg); margin-bottom:20px; }
+    .cs-section-body p:last-child { margin-bottom:0; }
+    .cs-section-body strong { font-weight:600; }
+    .cs-section-body em { font-style:normal; color:var(--accent); }
+    .cs-two-col { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; margin-top:48px; }
+    .cs-findings { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:48px; }
+    .cs-finding { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:28px; transition:border-color .3s; }
+    .cs-finding:hover { border-color:rgba(237,237,232,.25); }
+    .cs-finding-icon { font-size:22px; margin-bottom:12px; }
+    .cs-finding-title { font-family:'Inter',sans-serif; font-size:16px; font-weight:700; margin-bottom:8px; }
+    .cs-finding-text { font-size:13px; color:var(--muted); line-height:1.6; }
+    .cs-steps { display:flex; flex-direction:column; gap:0; margin-top:40px; }
+    .cs-step { display:flex; gap:24px; padding:20px 0; border-bottom:1px solid var(--border); align-items:baseline; }
+    .cs-step-num { font-family:'Inter',sans-serif; font-size:11px; font-weight:700; color:var(--muted); letter-spacing:.08em; flex-shrink:0; width:28px; }
+    .cs-step-content { flex:1; }
+    .cs-step-title { font-family:'Inter',sans-serif; font-size:17px; font-weight:700; margin-bottom:6px; }
+    .cs-step-text { font-size:14px; color:var(--muted); line-height:1.6; }
+
+    /* FLOW COMPARISON */
+    .cs-flow-compare { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:48px; }
+    .cs-flow-col { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:32px; }
+    .cs-flow-col-label { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+    .cs-flow-col-title { font-family:'Inter',sans-serif; font-size:18px; font-weight:700; margin-bottom:16px; }
+    .cs-flow-col.after .cs-flow-col-title { color:var(--accent); }
+    .cs-flow-step { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
+    .cs-flow-step:last-child { border-bottom:none; }
+    .cs-flow-dot { width:8px; height:8px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+    .cs-flow-col.after .cs-flow-dot { background:var(--accent); }
+    .cs-flow-strike { text-decoration:line-through; color:var(--muted); font-size:13px; }
+
+    /* METRICS */
+    .cs-metrics { display:flex; gap:0; border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-top:60px; }
+    .cs-metric { flex:1; padding:40px 32px; border-right:1px solid var(--border); text-align:center; }
+    .cs-metric:last-child { border-right:none; }
+    .cs-metric-val { font-family:'Inter',sans-serif; font-size:clamp(40px,5vw,64px); font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; margin-bottom:8px; }
+    .cs-metric-label { font-size:12px; color:var(--muted); line-height:1.5; max-width:160px; margin:0 auto; }
+
+    /* VISUAL */
+    .cs-visual { border-radius:16px; overflow:hidden; position:relative; opacity:0; transform:translateY(24px); }
+    .cs-visual.full { aspect-ratio:16/8; margin-top:64px; }
+    .cs-visual.tall { aspect-ratio:4/5; }
+    .cs-visual.wide { aspect-ratio:16/9; }
+    .cs-visual-inner { width:100%; height:100%; position:relative; display:flex; align-items:center; justify-content:center; }
+    .cs-visual-label { position:absolute; bottom:20px; left:20px; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.25); z-index:2; }
+
+    /* QUOTE */
+    .cs-quote { margin:60px 0; padding:40px 44px; border-left:3px solid var(--accent); background:var(--bg2); border-radius:0 12px 12px 0; }
+    .cs-quote p { font-family:'Inter',sans-serif; font-size:clamp(20px,2.5vw,30px); font-weight:700; letter-spacing:-.02em; line-height:1.35; color:var(--fg); }
+
+    /* RESULT */
+    .cs-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:40px; }
+    .cs-result-card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:32px; }
+    .cs-result-val { font-family:'Inter',sans-serif; font-size:clamp(36px,4.5vw,56px); font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; margin-bottom:10px; }
+    .cs-result-label { font-size:13px; color:var(--muted); line-height:1.5; }
+
+    /* NEXT */
+    .cs-next { display:block; padding:80px 44px; margin-top:80px; border-top:1px solid var(--border); background:var(--bg2); transition:background .3s; text-decoration:none; }
+    .cs-next:hover { background:var(--bg); }
+    .cs-next-label { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+    .cs-next-inner { display:flex; justify-content:space-between; align-items:center; gap:24px; }
+    .cs-next-name { font-family:'Inter',sans-serif; font-size:clamp(32px,5vw,72px); font-weight:800; letter-spacing:-.04em; line-height:.95; transition:color .3s; }
+    .cs-next:hover .cs-next-name { color:var(--accent); }
+    .cs-next-company { font-size:13px; color:var(--muted); margin-top:8px; }
+    .cs-next-arrow { width:64px; height:64px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .35s ease; }
+    .cs-next:hover .cs-next-arrow { background:var(--accent); border-color:var(--accent); transform:rotate(45deg); }
+    .cs-next:hover .cs-next-arrow svg path { stroke:#fff; }
+
+    /* FOOTER */
+    .cs-footer { padding:24px 44px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .cs-footer p { font-size:12px; color:var(--muted); }
+
+    /* PHONE COMPARE */
+    .cs-phone-compare { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-top:56px; border:1px solid var(--border); border-radius:20px; overflow:hidden; }
+    .cs-phone-group { padding:40px 32px 36px; }
+    .cs-phone-group:first-child { border-right:1px solid var(--border); }
+    .cs-phone-group-title { font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:28px; display:flex; align-items:center; gap:10px; }
+    .cs-phone-group-title::after { content:''; flex:1; height:1px; background:var(--border); }
+    .cs-phone-pair { display:flex; align-items:flex-start; gap:16px; }
+    .cs-phone-pair-arrow { color:var(--muted); font-size:16px; flex-shrink:0; padding-top:36px; }
+    .cs-phone-trio { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .cs-phone-card { flex:1; display:flex; flex-direction:column; align-items:center; }
+    .cs-phone-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:3px 10px; border-radius:20px; margin-bottom:12px; }
+    .cs-phone-label.old { background:var(--bg2); color:var(--muted); border:1px solid var(--border); }
+    .cs-phone-label.new { background:rgba(255,107,53,.12); color:var(--accent); border:1px solid rgba(255,107,53,.25); }
+    .cs-phone-wrap { width:100%; }
+    .cs-phone-wrap img, .cs-phone-wrap video { width:100%; height:auto; display:block; }
+    .cs-phone-caption { margin-top:12px; font-size:12px; font-weight:500; color:var(--fg); text-align:center; line-height:1.4; }
+    .cs-phone-caption span { display:block; font-size:11px; color:var(--muted); margin-top:3px; font-weight:400; }
+
+    /* SUMMARY BAND */
+    .cs-summary { padding:48px 44px; border-top:1px solid var(--border); }
+    .cs-summary-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:60px; align-items:center; }
+    .cs-summary-tldr { font-size:19px; font-weight:400; line-height:1.6; letter-spacing:-.01em; color:var(--fg); }
+    .cs-summary-tldr strong { font-weight:700; }
+    .cs-summary-stats { display:flex; gap:40px; flex-shrink:0; }
+    .cs-summary-stat { text-align:right; }
+    .cs-summary-stat-val { font-family:'Inter',sans-serif; font-size:34px; font-weight:800; letter-spacing:-.04em; color:var(--accent); line-height:1; }
+    .cs-summary-stat-label { font-size:11px; color:var(--muted); margin-top:4px; line-height:1.4; }
+    /* NEXT STEPS */
+    .cs-next-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; }
+    .cs-next-step { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:28px; }
+    .cs-next-step-num { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+    .cs-next-step-title { font-size:15px; font-weight:700; margin-bottom:8px; letter-spacing:-.01em; }
+    .cs-next-step-text { font-size:13px; color:var(--muted); line-height:1.6; }
+    /* RESPONSIVE */
+    @media (max-width:900px) {
+      nav { padding:18px 24px; }
+      nav.scrolled { top:12px; left:16px; right:16px; padding:12px 20px; }
+      .cs-hero { padding:0 24px max(48px,calc(48px + env(safe-area-inset-bottom))); }
+      .cs-section { padding:72px 24px; }
+      .cs-two-col { grid-template-columns:1fr; gap:40px; }
+      .cs-findings { grid-template-columns:1fr; }
+      .cs-result-grid { grid-template-columns:1fr; }
+      .cs-flow-compare { grid-template-columns:1fr; }
+      .cs-metrics { flex-direction:column; }
+      .cs-metric { border-right:none; border-bottom:1px solid var(--border); }
+      .cs-metric:last-child { border-bottom:none; }
+      .cs-hero-number { display:none; }
+      .cs-meta-strip { flex-wrap:wrap; }
+      .cs-meta-item { min-width:50%; border-right:none; border-bottom:1px solid var(--border); }
+      .cs-footer { flex-direction:column; gap:12px; text-align:center; }
+      .scroll-hint { top:auto; bottom:56px; }
+      .cs-phone-compare { grid-template-columns:1fr; }
+      .cs-phone-group:first-child { border-right:none; border-bottom:1px solid var(--border); }
+      .cs-summary-inner{grid-template-columns:1fr;gap:32px;} .cs-summary-stat{text-align:left;} .cs-summary-stats{gap:24px;flex-wrap:wrap;} .cs-next-steps{grid-template-columns:1fr;}
+    }
+
+    /* Stakeholder Management */
+    .cs-stakeholders { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:32px; }
+    .cs-stakeholder-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; }
+    .cs-stakeholder-role { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .cs-stakeholder-need { font-size:15px; font-weight:600; color:var(--fg); margin-bottom:6px; line-height:1.3; }
+    .cs-stakeholder-resolution { font-size:14px; color:var(--muted); line-height:1.5; }
+
+    /* Hypothesis */
+    .cs-hypothesis { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--fg); border-radius:12px; padding:32px; margin-top:32px; }
+    .cs-hypothesis-label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; }
+    .cs-hypothesis-text { font-size:clamp(18px,2.2vw,24px); font-weight:600; line-height:1.4; color:var(--text); margin-bottom:16px; }
+    .cs-hypothesis-rationale { font-size:15px; color:var(--muted); line-height:1.6; }
+
+    /* Implementation Plan */
+    .cs-impl-steps { list-style:none; padding:0; margin:24px 0 0; display:flex; flex-direction:column; gap:12px; }
+    .cs-impl-step { display:flex; gap:16px; align-items:flex-start; }
+    .cs-impl-step-num { width:28px; height:28px; border-radius:50%; background:var(--bg2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--muted); flex-shrink:0; margin-top:2px; }
+    .cs-impl-step-text { font-size:15px; color:var(--muted); line-height:1.6; }
+
+    /* Lessons Learned */
+    .cs-lessons { margin-top:32px; padding-top:32px; border-top:1px solid var(--border); }
+    .cs-lessons-label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+    .cs-lessons-list { display:flex; flex-direction:column; gap:16px; }
+    .cs-lesson { display:flex; gap:16px; align-items:flex-start; }
+    .cs-lesson-num { font-size:13px; font-weight:700; color:var(--muted); min-width:24px; padding-top:2px; }
+    .cs-lesson-text { font-size:15px; color:var(--muted); line-height:1.6; }
+
+    @media(max-width:640px){
+      .cs-stakeholders { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="preloader" aria-hidden="true">
+  <div class="pl-panel" id="plTop"></div>
+  <div class="pl-panel" id="plBot"></div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor-arrow">
+    <svg width="22" height="26" viewBox="0 0 22 26" fill="none">
+      <path d="M2 2L2 21L6.8 16.2L10.4 24L13.4 22.6L9.8 14.8L17 14.8L2 2Z" fill="white" stroke="#0C0C0B" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="cursor-label">
+    <span class="cursor-label-dot"></span>
+          <span>Guest</span>
+  </div>
+</div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">dvdrod</a>
+  <div class="nav-right">
+<button class="theme-btn" id="themeBtn">
+      <span id="tIcon">◐</span><span id="tLabel">Light</span>
+    </button>
+  </div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="cs-hero-bg" style="background:linear-gradient(145deg,#1A0500,#7A2800,#D44A0A);"></div>
+  <div class="cs-hero-blob" style="width:520px;height:520px;top:-120px;right:-100px;background:#FF6B35;opacity:.2;"></div>
+  <div class="cs-hero-blob" style="width:280px;height:280px;bottom:80px;left:-60px;background:#FF3D00;opacity:.12;"></div>
+  <span class="cs-hero-number">01</span>
+
+  <div class="cs-title-wrap">
+    <p class="cs-company">NeoTaste</p>
+    <h1 class="cs-title">
+      <span class="tl"><span>Onboarding</span></span>
+      <span class="tl"><span>Redesign</span></span>
+    </h1>
+  </div>
+
+  <div class="cs-meta-strip">
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Role</div>
+      <div class="cs-meta-value">Senior Product Designer</div>
+    </div>
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Year</div>
+      <div class="cs-meta-value">2024</div>
+    </div>
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Location</div>
+      <div class="cs-meta-value">Berlin, Germany</div>
+    </div>
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Type</div>
+      <div class="cs-meta-value">Mobile App · UX Research</div>
+    </div>
+  </div>
+
+  <div style="position:absolute;top:110px;right:44px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;pointer-events:none;" class="scroll-hint" aria-hidden="true">
+    <div style="width:1px;height:64px;background:var(--border);position:relative;overflow:hidden;">
+      <style>.sh-anim::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--accent);animation:shln 2.4s ease infinite;}@keyframes shln{0%{top:-100%}100%{top:100%}}</style>
+      <div class="sh-anim" style="width:100%;height:100%;"></div>
+    </div>
+    <span style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-lr;">Scroll</span>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<div class="cs-summary">
+  <div class="cs-summary-inner">
+    <p class="cs-summary-tldr">Redesigned NeoTaste's bloated 7-screen onboarding into a <strong>3-step, value-first flow</strong> — cutting drop-off by 63% and nearly doubling Day-1 activation within one month of launch.</p>
+    <div class="cs-summary-stats">
+      <div class="cs-summary-stat"><div class="cs-summary-stat-val">−63%</div><div class="cs-summary-stat-label">Onboarding drop-off</div></div>
+      <div class="cs-summary-stat"><div class="cs-summary-stat-val">+38%</div><div class="cs-summary-stat-label">Day-1 activation</div></div>
+      <div class="cs-summary-stat"><div class="cs-summary-stat-val">4.6★</div><div class="cs-summary-stat-label">App Store rating</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 CONTEXT -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">01 — Context</div>
+    <h2 class="cs-section-title">More than half of new users were leaving before they ever saw what NeoTaste could do.</h2>
+    <div class="cs-two-col">
+      <div class="cs-section-body">
+        <p>NeoTaste is a restaurant discovery and deals platform used by hundreds of thousands of food lovers across Germany. Users sign up to explore local restaurants, unlock exclusive deals, and book tables directly in the app.</p>
+        <p>When I joined the Growth team in early 2024, the data told a clear story: <strong>54% of newly registered users dropped off during onboarding</strong> — never reaching the home feed and therefore never experiencing the product's core value.</p>
+        <p>The existing flow had grown organically over 3 years. What started as a simple 3-step setup had ballooned into a <em>7-screen sequence</em> with permission requests, lengthy form fields, and marketing opt-ins — all before showing the user a single restaurant.</p>
+        <p>I led this project as the sole product designer on the Growth team, working closely with the Growth PM and a data analyst, and aligning with engineering early to define what was feasible to ship within the quarter.</p>
+      </div>
+      <div class="cs-visual" style="aspect-ratio:unset;">
+        <div class="cs-visual-inner" style="background:#0a0a0a; height:auto; align-items:flex-start;">
+          <img src="images/neotaste-onboarding/old%20onboarding.png" alt="Old NeoTaste onboarding — 7 steps" style="width:auto;height:auto;max-height:560px;max-width:100%;display:block;margin:0 auto;">
+          <div class="cs-visual-label">Old onboarding — 7 steps</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 HYPOTHESIS -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">02 — Hypothesis</div>
+    <h2 class="cs-section-title">Value first, permissions later.</h2>
+    <div class="cs-section-body">
+      <div class="cs-hypothesis">
+        <p class="cs-hypothesis-label">Our bet</p>
+        <p class="cs-hypothesis-text">Simplifying the flow and showing value before asking for permissions or data would significantly reduce drop-off and increase Day-1 activation.</p>
+        <p class="cs-hypothesis-rationale">Session recordings showed most abandonment occurred when permission screens appeared before users understood what the app did. Benchmark research from similar restaurant discovery apps showed value-first onboarding flows achieved 4x higher completion rates. We believed that letting users see real restaurants and deals in the first 15 seconds would establish trust, making them more willing to grant permissions and complete signup.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 RESEARCH -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">03 — Research & Analysis</div>
+    <h2 class="cs-section-title">Session recordings and eight user interviews surfaced the same friction points again and again.</h2>
+    <div class="cs-section-body">
+      <p>Before touching a wireframe, I spent two weeks in discovery. I reviewed session recordings in Hotjar, analysed the step-by-step funnel in Mixpanel, and ran eight 45-minute moderated interviews with recently churned users recruited through a post-signup survey.</p>
+      <p>The funnel data confirmed that <strong>step 3 (location permissions) and step 5 (notification opt-in) had the highest abandonment</strong>. The interviews told us why: users felt the app was asking for too much before proving its worth.</p>
+      <p>I presented the findings to the Growth PM and engineering lead before touching a wireframe — getting alignment on the root cause early meant the solution brief was agreed before I opened Figma.</p>
+    </div>
+
+    <div class="cs-quote">
+      <p>"I didn't understand why it needed my location before I'd even seen what the app looked like. I just closed it."</p>
+    </div>
+
+    <div class="cs-findings">
+      <div class="cs-finding">
+        <div class="cs-finding-icon">📉</div>
+        <div class="cs-finding-title">54% Never Reached the Feed</div>
+        <div class="cs-finding-text">Mixpanel funnel analysis showed the majority of sign-ups abandoned before completing onboarding, with the sharpest drops at steps 3 and 5.</div>
+      </div>
+      <div class="cs-finding">
+        <div class="cs-finding-icon">🔐</div>
+        <div class="cs-finding-title">Premature Permission Asks</div>
+        <div class="cs-finding-text">Location and notification requests appeared at steps 3 and 5 — before users understood the product's value. iOS declined rates were over 70%.</div>
+      </div>
+      <div class="cs-finding">
+        <div class="cs-finding-icon">❓</div>
+        <div class="cs-finding-title">Unclear Value Proposition</div>
+        <div class="cs-finding-text">8 out of 8 interview participants couldn't articulate what NeoTaste did after completing onboarding. The copy focused on setup, not benefits.</div>
+      </div>
+      <div class="cs-finding">
+        <div class="cs-finding-icon">📝</div>
+        <div class="cs-finding-title">Form Fatigue</div>
+        <div class="cs-finding-text">Asking for name, city, dietary preferences, and marketing consent upfront felt like bureaucracy. Users expected to explore first, fill forms later.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 STAKEHOLDER MANAGEMENT -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">04 — Stakeholder Management</div>
+    <h2 class="cs-section-title">Aligning across product, engineering, and marketing on scope and tradeoffs.</h2>
+    <div class="cs-section-body">
+      <p>This redesign touched multiple teams with competing priorities. Early alignment on the research findings was critical — I shared session recordings and funnel data with stakeholders before proposing solutions, which helped frame the conversation around user behavior rather than opinions.</p>
+      <div class="cs-stakeholders">
+        <div class="cs-stakeholder-card">
+          <p class="cs-stakeholder-role">Product Manager</p>
+          <p class="cs-stakeholder-need">Wanted to keep location permission early (needed to optimize local restaurant recommendations)</p>
+          <p class="cs-stakeholder-resolution">Compromised: location request was deferred to first search, where context makes the ask feel natural. Engineering and I prototyped this to prove the pattern worked on iOS guidelines.</p>
+        </div>
+        <div class="cs-stakeholder-card">
+          <p class="cs-stakeholder-role">Engineering Lead</p>
+          <p class="cs-stakeholder-need">Flagged concern about animation complexity in the splash screen and feared scope creep</p>
+          <p class="cs-stakeholder-resolution">Worked iteratively on prototypes showing animation performance on low-end devices; scoped progressive profiling to v2 to keep sprint tight.</p>
+        </div>
+        <div class="cs-stakeholder-card">
+          <p class="cs-stakeholder-role">Growth/Marketing</p>
+          <p class="cs-stakeholder-need">Wanted more brand touchpoints and email capture in the flow</p>
+          <p class="cs-stakeholder-resolution">Added a subtle brand moment in the splash screen and scheduled email capture for Day 3 push via post-signup behavioral trigger, rather than in-flow.</p>
+        </div>
+        <div class="cs-stakeholder-card">
+          <p class="cs-stakeholder-role">Data Team</p>
+          <p class="cs-stakeholder-need">Needed new event tracking to measure progressive profiling behavior</p>
+          <p class="cs-stakeholder-resolution">Iterated on analytics spec in weekly syncs; launched with core metrics first, refined tracking in subsequent sprints.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 DESIGN PROCESS -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">05 — Design Process</div>
+    <h2 class="cs-section-title">From 7 friction-heavy steps to 3 — with value shown before anything is asked.</h2>
+    <div class="cs-section-body">
+      <p>The guiding principle became: <strong>earn the right to ask</strong>. Show the product first. Let users experience the core value — browsing nearby restaurants and deals — before requesting permissions or preferences.</p>
+      <p>I mapped three concept directions, workshopped them with the PM and engineering lead, and moved into prototype testing within two weeks. Each concept was tested with 6 participants in unmoderated sessions via Maze.</p>
+    </div>
+
+    <div class="cs-flow-compare">
+      <div class="cs-flow-col before">
+        <div class="cs-flow-col-label">Before — 7 Steps</div>
+        <div class="cs-flow-col-title">Old flow</div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>01 — Welcome screen</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>02 — Create account (email + password)</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span class="cs-flow-strike">03 — Location permission request</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>04 — Dietary preferences (12 options)</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span class="cs-flow-strike">05 — Push notification opt-in</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span class="cs-flow-strike">06 — Marketing email consent</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>07 — Home feed (first value moment)</span></div>
+      </div>
+      <div class="cs-flow-col after">
+        <div class="cs-flow-col-label">After — 3 Steps</div>
+        <div class="cs-flow-col-title">New flow</div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>01 — Value-first splash (animated restaurant cards)</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>02 — Create account (email only, social login)</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span>03 — Home feed unlocked immediately</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span style="color:var(--muted);font-size:12px;font-style:italic;">↳ Location asked contextually on first search</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span style="color:var(--muted);font-size:12px;font-style:italic;">↳ Preferences collected progressively over first week</span></div>
+        <div class="cs-flow-step"><div class="cs-flow-dot"></div><span style="color:var(--muted);font-size:12px;font-style:italic;">↳ Push notifications asked after first deal saved</span></div>
+      </div>
+    </div>
+
+    <div class="cs-visual" style="margin-top:48px; aspect-ratio:unset;">
+      <div class="cs-visual-inner" style="background:#f0efed; height:auto; align-items:flex-start;">
+        <img src="images/neotaste-onboarding/New%20Onboarding.png" alt="New onboarding full flow map" style="width:100%;height:auto;display:block;">
+        <div class="cs-visual-label">New flow map — Figma prototype</div>
+      </div>
+    </div>
+
+    <div style="margin-top:60px;">
+      <h3 style="font-size:clamp(20px,2.5vw,28px); font-weight:700; margin-bottom:24px;">Design Solution</h3>
+      <p style="font-size:17px; line-height:1.7; color:var(--fg); margin-bottom:20px;">The redesigned onboarding opens with an <strong>animated restaurant card carousel</strong> — real venues from the user's region, showing deal prices and cuisine types. The first 15 seconds are spent watching the product work, not filling out a form.</p>
+      <p style="font-size:17px; line-height:1.7; color:var(--fg); margin-bottom:20px;">Account creation was stripped to the minimum: email and password, plus Apple/Google sign-in. Dietary preferences were removed entirely from onboarding and replaced by a progressive profiling system that learns from saved items and search behaviour over the first week.</p>
+      <p style="font-size:17px; line-height:1.7; color:var(--fg); margin-bottom:20px;">Permission asks were <em>deferred to context</em>: location is requested the first time a user searches, push notifications are requested the first time a user saves a deal. Both convert at over 60% in this contextual state vs. under 30% in the old flow.</p>
+    </div>
+
+    <div class="cs-steps">
+      <div class="cs-step">
+        <div class="cs-step-num">01</div>
+        <div class="cs-step-content">
+          <div class="cs-step-title">Value-first splash screen</div>
+          <div class="cs-step-text">Full-screen animated cards show real deals from local restaurants. Users see the product before they commit. Avg. time on this screen: 18 seconds.</div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-num">02</div>
+        <div class="cs-step-content">
+          <div class="cs-step-title">Minimal account creation</div>
+          <div class="cs-step-text">Email + password, or one-tap Apple/Google sign-in. No address, no preferences, no consent walls. Time to complete: under 40 seconds.</div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-num">03</div>
+        <div class="cs-step-content">
+          <div class="cs-step-title">Immediate home feed access</div>
+          <div class="cs-step-text">Users land in the full product experience. A subtle first-use tooltip sequence guides discovery of the three core actions over the first session.</div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-num">04</div>
+        <div class="cs-step-content">
+          <div class="cs-step-title">Contextual permission system</div>
+          <div class="cs-step-text">Location and notification permissions are requested at the exact moment they add value — during first search and first deal save respectively.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Before / After phone comparison -->
+    <div class="cs-phone-compare">
+
+      <!-- Group 1: Splash screen -->
+      <div class="cs-phone-group">
+        <div class="cs-phone-group-title">Splash Screen</div>
+        <div class="cs-phone-pair">
+          <div class="cs-phone-card">
+            <div class="cs-phone-label old">Before</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/old%20static%20splash.png" alt="Old static splash screen" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Static launch screen<br><span>Single frame, no motion</span></p>
+          </div>
+          <div class="cs-phone-pair-arrow">→</div>
+          <div class="cs-phone-card">
+            <div class="cs-phone-label new">After</div>
+            <div class="cs-phone-wrap">
+              <video src="images/neotaste-onboarding/new-splash.mp4" poster="images/neotaste-onboarding/poster-splash.jpg" autoplay loop muted playsinline></video>
+            </div>
+            <p class="cs-phone-caption">Animated splash<br><span>4s motion sequence</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 2: Intro / onboarding screens -->
+      <div class="cs-phone-group">
+        <div class="cs-phone-group-title">Intro Screens</div>
+        <div class="cs-phone-pair">
+          <div class="cs-phone-card">
+            <div class="cs-phone-label old">Before</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/old%20onboarding.png" alt="Old onboarding — video-first flow" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Video-only intro<br><span>Play video or skip</span></p>
+          </div>
+          <div class="cs-phone-pair-arrow">→</div>
+          <div class="cs-phone-card">
+            <div class="cs-phone-label new">After</div>
+            <div class="cs-phone-wrap">
+              <video src="images/neotaste-onboarding/new-onboarding.mp4" poster="images/neotaste-onboarding/poster-onboarding.jpg" autoplay loop muted playsinline></video>
+            </div>
+            <p class="cs-phone-caption">3-step value slider<br><span>Benefits before sign-up</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 3: Paywall -->
+      <div class="cs-phone-group">
+        <div class="cs-phone-group-title">Paywall</div>
+        <div class="cs-phone-pair">
+          <div class="cs-phone-card">
+            <div class="cs-phone-label old">Before</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/paywall_old.png" alt="Old paywall" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Urgency-led trial<br><span>Countdown timer, free gate</span></p>
+          </div>
+          <div class="cs-phone-pair-arrow">→</div>
+          <div class="cs-phone-card">
+            <div class="cs-phone-label new">After</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/paywall_new.png" alt="New paywall" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Value-led paywall<br><span>Benefits first, price second</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 4: Pricing -->
+      <div class="cs-phone-group">
+        <div class="cs-phone-group-title">Pricing</div>
+        <div class="cs-phone-pair">
+          <div class="cs-phone-card">
+            <div class="cs-phone-label old">Before</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/pricing_old.png" alt="Old pricing" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Single-tier pricing<br><span>Limited plan context</span></p>
+          </div>
+          <div class="cs-phone-pair-arrow">→</div>
+          <div class="cs-phone-card">
+            <div class="cs-phone-label new">After</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/pricing_new.png" alt="New pricing" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Clearer pricing<br><span>Plan comparison, value anchoring</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 5: Payment — full width -->
+      <div class="cs-phone-group" style="grid-column:1/-1; border-top:1px solid var(--border);">
+        <div class="cs-phone-group-title">Payment</div>
+        <div class="cs-phone-pair" style="max-width:560px;">
+          <div class="cs-phone-card">
+            <div class="cs-phone-label old">Before</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/payment_old.png" alt="Old payment" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Standard checkout<br><span>Form-heavy, no native pay</span></p>
+          </div>
+          <div class="cs-phone-pair-arrow">→</div>
+          <div class="cs-phone-card">
+            <div class="cs-phone-label new">After</div>
+            <div class="cs-phone-wrap">
+              <img src="images/neotaste-onboarding/payment_new.png" alt="New payment" loading="lazy">
+            </div>
+            <p class="cs-phone-caption">Streamlined checkout<br><span>Apple/Google Pay prominent</span></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:60px;">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Implementation Plan</p>
+      <ul class="cs-impl-steps">
+        <li class="cs-impl-step"><span class="cs-impl-step-num">1</span><span class="cs-impl-step-text">Phased rollout: 20% traffic A/B test for 2 weeks to validate metrics and catch edge cases in low-traffic scenarios. Required close coordination with Data and QA teams to instrument event tracking for all permission flows.</span></li>
+        <li class="cs-impl-step"><span class="cs-impl-step-num">2</span><span class="cs-impl-step-text">Engineering flagged animation performance risk on older Android devices. Mitigated by optimizing carousel re-renders and using CSS transforms instead of JavaScript animations. Tested on devices with 2GB RAM.</span></li>
+        <li class="cs-impl-step"><span class="cs-impl-step-num">3</span><span class="cs-impl-step-text">Scoped progressive profiling to v2 after engineering estimated 3+ weeks for full implementation. Launched with basic behavior-based preferences collection instead of explicit form.</span></li>
+        <li class="cs-impl-step"><span class="cs-impl-step-num">4</span><span class="cs-impl-step-text">Backend permission system update required changes to the location services API. Coordinated timing so dependent features (search filtering) shipped in same release.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 06 METRICS & KPIs -->
+<section class="cs-section" style="padding-bottom:0;">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">06 — Metrics & KPIs</div>
+    <h2 class="cs-section-title">Drop-off cut in half. Day-1 activation nearly doubled.</h2>
+    <div class="cs-section-body">
+      <p>The redesigned flow shipped to 100% of new users in Q3 2024 after a successful 2-week A/B test at 20% traffic. Results were measured across a 30-day post-launch window.</p>
+    </div>
+    <div class="cs-metrics">
+      <div class="cs-metric">
+        <div class="cs-metric-val">−63%</div>
+        <div class="cs-metric-label">Onboarding drop-off rate (54% → 20%)</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric-val">+38%</div>
+        <div class="cs-metric-label">Day-1 activation (users who saved ≥1 deal)</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric-val">4.6★</div>
+        <div class="cs-metric-label">App Store rating after launch (was 3.8)</div>
+      </div>
+      <div class="cs-metric">
+        <div class="cs-metric-val">2×</div>
+        <div class="cs-metric-label">Location permission grant rate (28% → 61%)</div>
+      </div>
+    </div>
+    <div class="cs-result-grid" style="margin-top:24px;">
+      <div class="cs-result-card">
+        <div class="cs-result-val">18s</div>
+        <div class="cs-result-label">Average time spent on value-first splash — users were engaged before signing up</div>
+      </div>
+      <div class="cs-result-card">
+        <div class="cs-result-val">+22%</div>
+        <div class="cs-result-label">Week-1 retention uplift for users who came through the new flow vs. old cohorts</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT STEPS -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-label">07 — Conclusion</div>
+    <h2 class="cs-section-title">Simplifying early experiences unlocks disproportionate value.</h2>
+    <div class="cs-section-body">
+      <p style="margin-bottom:40px;">This redesign proved that onboarding drop-off wasn't about users not understanding NeoTaste — it was about friction points and broken trust. By showing value first and asking for permissions in context, we reduced abandonment by 63% and nearly doubled Day-1 activation. Beyond the metrics, the 4.6-star App Store rating reflected a better first impression.</p>
+    </div>
+    <div class="cs-lessons">
+      <p class="cs-lessons-label">Lessons Learned</p>
+      <div class="cs-lessons-list">
+        <div class="cs-lesson"><span class="cs-lesson-num">01</span><span class="cs-lesson-text"><strong>Data + clips > opinions.</strong> Session recordings made the case for cutting the dietary preferences screen far more compelling than a slide deck. When stakeholders saw three users abandon at the same screen, alignment happened in minutes.</span></div>
+        <div class="cs-lesson"><span class="cs-lesson-num">02</span><span class="cs-lesson-text"><strong>Context changes everything for permissions.</strong> The same location permission that converted at 28% on the splash screen converted at 61% when requested during search. Timing and context, not design, drive permission grant rates.</span></div>
+        <div class="cs-lesson"><span class="cs-lesson-num">03</span><span class="cs-lesson-text"><strong>Scope is a design decision.</strong> Progressive profiling was the tightest design problem (learning preferences without forms). Descoping it to v2 kept the sprint realistic and the core flow laser-focused. The perfect is the enemy of the shipped.</span></div>
+      </div>
+    </div>
+    <div class="cs-next-steps" style="margin-top:48px;">
+      <div class="cs-next-step">
+        <div class="cs-next-step-num">01</div>
+        <div class="cs-next-step-title">Progressive profiling</div>
+        <div class="cs-next-step-text">Collect dietary preferences and cuisine interests through in-app behaviour — saves, searches, bookings — rather than a form during onboarding. Descoped from v1, this would close the data gap left by removing the preferences screen.</div>
+      </div>
+      <div class="cs-next-step">
+        <div class="cs-next-step-num">02</div>
+        <div class="cs-next-step-title">Paywall trigger A/B test</div>
+        <div class="cs-next-step-text">The free trial currently appears mid-onboarding. Testing whether deferring it until after a user saves their first deal improves both conversion rate and retention quality is the natural next test.</div>
+      </div>
+      <div class="cs-next-step">
+        <div class="cs-next-step-num">03</div>
+        <div class="cs-next-step-title">Location pre-permission screen</div>
+        <div class="cs-next-step-text">A designed screen explaining why location improves the experience — rather than hitting users with the raw iOS system prompt. Benchmarks suggest this could improve grant rates by 15–20%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT -->
+<a href="neotaste-quests" class="cs-next">
+  <p class="cs-next-label">Next project</p>
+  <div class="cs-next-inner">
+    <div>
+      <div class="cs-next-name">Quest System</div>
+      <div class="cs-next-company">NeoTaste</div>
+    </div>
+    <div class="cs-next-arrow">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M3 15L15 3M15 3H5M15 3V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</a>
+
+<footer class="cs-footer">
+  <p>© 2026 David Rodriguez</p>
+  <p></p>
+</footer>
+
+</main>
+
+<script src="../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="../cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  const html=document.documentElement,tBtn=document.getElementById('themeBtn'),tIcon=document.getElementById('tIcon'),tLbl=document.getElementById('tLabel');
+  let dark=(localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))==='dark';
+  tIcon.textContent=dark?'◐':'◑'; tLbl.textContent=dark?'Light':'Dark';
+  tBtn.addEventListener('click',()=>{dark=!dark;html.setAttribute('data-theme',dark?'dark':'light');localStorage.setItem('theme',dark?'dark':'light');tIcon.textContent=dark?'◐':'◑';tLbl.textContent=dark?'Light':'Dark';});
+
+  if(window.matchMedia('(pointer: fine)').matches){
+    const cursorEl=document.getElementById('cursor');
+    document.addEventListener('mousemove',e=>{cursorEl.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;cursorEl.style.opacity='1';});
+    document.addEventListener('mouseleave',()=>cursorEl.style.opacity='0');
+    document.addEventListener('mouseenter',()=>cursorEl.style.opacity='1');
+    document.querySelectorAll('a,button,.cs-finding,.cs-result-card,.cs-flow-col').forEach(el=>{
+      el.addEventListener('mouseenter',()=>document.body.classList.add('is-hovering'));
+      el.addEventListener('mouseleave',()=>document.body.classList.remove('is-hovering'));
+    });
+  }
+
+  const preloader=document.getElementById('preloader'),plTop=document.getElementById('plTop'),plBot=document.getElementById('plBot');
+  window.addEventListener('load',()=>{
+    setTimeout(()=>{
+      gsap.to(plTop,{yPercent:-100,duration:.5,ease:'power3.inOut'});
+      gsap.to(plBot,{yPercent:100,duration:.5,ease:'power3.inOut',onComplete:()=>{preloader.style.display='none';initAnim();}});
+    },80);
+  });
+
+  gsap.registerPlugin(ScrollTrigger);
+  function initAnim(){
+    gsap.to('.cs-title .tl span',{y:0,duration:1,stagger:.1,ease:'power3.out',delay:.05});
+    gsap.to('.cs-meta-strip',{opacity:1,y:0,duration:.7,ease:'power2.out',delay:.6});
+    gsap.to('.scroll-hint',{opacity:1,duration:.5,delay:1.1});
+    gsap.utils.toArray('.cs-section-title').forEach(el=>{gsap.fromTo(el,{opacity:0,y:28},{opacity:1,y:0,duration:.75,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%'}});});
+    gsap.utils.toArray('.cs-section-body p').forEach((el,i)=>{gsap.fromTo(el,{opacity:0,y:18},{opacity:1,y:0,duration:.6,delay:i*.06,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 90%'}});});
+    gsap.utils.toArray('.cs-finding,.cs-step,.cs-result-card,.cs-flow-col').forEach((el,i)=>{gsap.fromTo(el,{opacity:0,y:24},{opacity:1,y:0,duration:.6,delay:i*.07,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 90%'}});});
+    gsap.utils.toArray('.cs-visual').forEach(el=>{gsap.to(el,{opacity:1,y:0,duration:.8,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 85%'}});});
+    gsap.utils.toArray('.cs-metric-val').forEach(el=>{gsap.fromTo(el,{opacity:0,y:16},{opacity:1,y:0,duration:.7,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%'}});});
+    gsap.utils.toArray('.cs-quote').forEach(el=>{gsap.fromTo(el,{opacity:0,x:-20},{opacity:1,x:0,duration:.7,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 88%'}});});
+  }
+
+  const navEl=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{navEl.classList.toggle('scrolled',window.scrollY>50);},{passive:true});
+</script>
+</body>
+
+<!-- Mirrored from dvdrod.com/neotaste-onboarding by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Jun 2026 05:31:12 GMT -->
+</html>
