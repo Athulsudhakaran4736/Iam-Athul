@@ -56,17 +56,23 @@ export function ContactPage() {
       <header className="page-intro">
         <p className="eyebrow accent">Contact</p>
         <h1>Let’s talk.</h1>
-        <p>Have an engineering role or a project in mind? Tell me what you’re working on.</p>
+        <p>I’m open to software engineering roles and freelance projects.</p>
       </header>
       <div className="contact-grid">
-        <aside className="contact-details">
-          <h2>Find me online</h2>
-          <a className="text-link" href={'mailto:' + profile.email}>{profile.email}</a>
-          <button type="button" className="copy-email" onClick={copyEmail}>Copy email</button>
-          <p className="copy-feedback" role="status">{copyStatus}</p>
-          <a className="text-link" href={profile.linkedin}>LinkedIn <Arrow external /></a>
-          <a className="text-link" href={profile.github}>GitHub <Arrow external /></a>
-          <p>Bengaluru, India</p>
+        <aside className="contact-details" aria-labelledby="direct-contact">
+          <h2 className="eyebrow" id="direct-contact">Direct contact</h2>
+          <div className="contact-email">
+            <a className="contact-link" href={'mailto:' + profile.email}>{profile.email}</a>
+            <button type="button" className="copy-email" onClick={copyEmail} aria-label="Copy email address">
+              {copyStatus === 'Email address copied.' ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+          <p className="copy-feedback sr-only" role="status">{copyStatus}</p>
+          <div className="contact-socials">
+            <a className="contact-link" href={profile.linkedin}>LinkedIn <Arrow external /></a>
+            <a className="contact-link" href={profile.github}>GitHub <Arrow external /></a>
+          </div>
+          <p className="contact-location">Bengaluru, India</p>
         </aside>
         <form className="contact-form" onSubmit={submit} aria-label="Contact Athul" aria-busy={status.kind === 'sending'}>
           {fields.map(({ name, label, type, autoComplete, maxLength }) => {

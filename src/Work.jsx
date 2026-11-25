@@ -39,7 +39,7 @@ function ProjectFeature({ project, lead }) {
         <p>{project.summary}</p>
         <p className="contribution">{project.contribution}</p>
         <Stack stack={project.stack} />
-        {project.live ? <a className="text-link project-live" href={project.live}>Live site <Arrow external /></a> : null}
+        {project.live ? <a className="text-link project-live" href={project.live} target="_blank" rel="noopener">Live site <Arrow external /><span className="sr-only"> (opens in a new tab)</span></a> : null}
       </div>
     </article>
   );
@@ -53,8 +53,7 @@ export function SelectedWork() {
   return (
     <section className="section wrap" id="work" aria-labelledby="selected-work">
       <header className="section-header">
-        <div><p className="eyebrow accent">Portfolio</p><h2 id="selected-work">Selected work</h2></div>
-        <p>Frontend and full-stack development across marketing, education, and e-commerce.</p>
+        <h2 id="selected-work">Selected work</h2>
       </header>
       <ProjectGrid items={selectedProjects} />
       <div className="section-action"><a className="button button--primary" href="/projects">View all projects <Arrow /></a></div>
@@ -86,9 +85,7 @@ export function ProjectsPage() {
   return (
     <div className="wrap page">
       <header className="page-intro">
-        <p className="eyebrow accent">Portfolio</p>
         <h1>Projects</h1>
-        <p>From landing pages to full-stack applications, explore what I built and where I contributed.</p>
       </header>
       <div className="filters" role="group" aria-label="Filter projects by category">
         {categories.map((item) => <button type="button" key={item} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}
@@ -110,7 +107,7 @@ export function ProjectDetail({ project }) {
         <h1>{project.name}</h1>
         <p>{project.summary}</p>
         <div className="actions">
-          {project.live ? <a className="button button--primary" href={project.live}>Visit live site <Arrow external /></a> : null}
+          {project.live ? <a className="button button--primary" href={project.live} target="_blank" rel="noopener">Visit live site <Arrow external /><span className="sr-only"> (opens in a new tab)</span></a> : null}
           {project.github ? <a className="button" href={project.github}>GitHub <Arrow external /></a> : null}
         </div>
       </header>
@@ -124,10 +121,7 @@ export function ProjectDetail({ project }) {
           </dl>
         </aside>
         <div className="detail-story">
-          <section><h2>Overview</h2><p>{project.summary}</p></section>
-          {project.challenge ? <section><h2>Challenge</h2><p>{project.challenge}</p></section> : null}
-          {project.solution ? <section><h2>Solution</h2><p>{project.solution}</p></section> : null}
-          <section><h2>Technical implementation</h2><p>{project.implementation}</p></section>
+          {project.implementation ? <section><h2>How I built it</h2><p>{project.implementation}</p></section> : null}
         </div>
       </div>
       <a className="next-project" href={projectHref(next)}><span><span className="eyebrow">Next project</span><strong>{next.name}</strong></span><Arrow /></a>

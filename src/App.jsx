@@ -16,12 +16,32 @@ function ThemeToggle() {
     setLight(!light);
   }
 
-  return <button className="theme-toggle" type="button" onClick={toggle} aria-label="Light theme" aria-pressed={light}><span aria-hidden="true">◐</span></button>;
+  return (
+    <button className="theme-toggle" type="button" onClick={toggle} aria-label={light ? 'Switch to dark theme' : 'Switch to light theme'}>
+      <span aria-hidden="true">{light ? '☾' : '☀'}</span>
+    </button>
+  );
 }
 
 function SiteHeader({ path }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    let pastThreshold;
+    function updateHeader() {
+      const next = window.scrollY > 50;
+      if (next === pastThreshold) return;
+      pastThreshold = next;
+      setScrolled(next);
+    }
+
+    updateHeader();
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    return () => window.removeEventListener('scroll', updateHeader);
+  }, []);
+
   return (
-    <header className="site-header">
+    <header className={scrolled ? 'site-header site-header--floating' : 'site-header'}>
       <div className="wrap header-inner">
         <a href="/" className="site-logo" aria-current={path === '/' ? 'page' : undefined}>I’m Athul<span>.</span></a>
         <nav aria-label="Main navigation">
@@ -56,7 +76,7 @@ function Competencies() {
 function ContactCallout() {
   return (
     <section className="wrap cta" id="contact">
-      <div><p className="eyebrow accent">Get in touch</p><h2>Let’s talk.</h2></div>
+      <h2>Let’s talk.</h2>
       <a className="button button--primary" href="/contact">Contact me <Arrow /></a>
     </section>
   );
@@ -66,18 +86,18 @@ function Home() {
   return (
     <>
       <section className="wrap hero" id="hero">
-        <p className="eyebrow accent">Software engineer <span className="eyebrow-rule" /> Full-stack developer</p>
+        <p className="eyebrow accent">Software engineer</p>
         <h1>Hi,<br />I’m Athul<span>.</span></h1>
         <div className="hero-bottom">
-          <p>Kerala-raised, Bengaluru-based software engineer building responsive, high-performance web applications.</p>
-          <div className="actions"><a className="button button--primary" href="#work">Explore my work <span aria-hidden="true">↓</span></a><a className="text-link" href={profile.resume}>Download CV <Arrow external /></a></div>
+          <p>I build websites and web apps with React and Node.js. I’m from Kerala and live in Bengaluru.</p>
+          <div className="actions"><a className="button button--primary" href="#work">Explore my work <span aria-hidden="true">↓</span></a><a className="text-link" href={profile.resume} download>Download CV <span aria-hidden="true">↓</span></a></div>
         </div>
         <div className="hero-location"><span className="available-dot" /> Available for work <span className="eyebrow-rule" /> Bengaluru, India</div>
       </section>
       <SelectedWork />
       <section className="wrap section home-about" id="about">
-        <div><p className="eyebrow accent">About</p><h2>From interface to API.</h2></div>
-        <div><p>I’m a software engineer at Trigent, working across responsive interfaces and full-stack applications.</p><a className="text-link" href="/about">More about me <Arrow /></a></div>
+        <div><p className="eyebrow accent">About</p><h2>What I work with</h2></div>
+        <div><p>At Trigent, I’ve worked on a learning platform and updated the interface for a property management app.</p><a className="text-link" href="/about">More about me <Arrow /></a></div>
         <Competencies />
       </section>
       <ContactCallout />
@@ -93,20 +113,20 @@ function About() {
           <p className="eyebrow accent">About</p>
           <h1>I’m Athul.</h1>
           <p>I grew up in Kerala, studied computer science in Thalassery, and now build web applications from Bengaluru.</p>
-          <div className="actions"><a className="button button--primary" href={profile.resume}>Download CV <Arrow external /></a><a className="text-link" href="/contact">Get in touch <Arrow /></a></div>
+          <div className="actions"><a className="button button--primary" href={profile.resume} download>Download CV <span aria-hidden="true">↓</span></a><a className="text-link" href="/contact">Get in touch <Arrow /></a></div>
         </header>
         <section className="about-row">
-          <h2>Career journey</h2>
+          <h2>Experience and education</h2>
           <ol className="timeline">
             {journey.map(([date, role, company, description]) => <li key={date}><p className="eyebrow">{date}</p><h3>{role}</h3><p className="company">{company}</p>{description ? <p>{description}</p> : null}</li>)}
           </ol>
         </section>
-        <section className="about-row"><h2>Technical expertise</h2><Competencies /></section>
+        <section className="about-row"><h2>Tools I use</h2><Competencies /></section>
         <section className="about-row">
           <h2>How I work</h2>
           <div className="prose">
-            <p>I start with what people need to do in the product. On the frontend, I pay attention to how the interface behaves across screen sizes. When the work extends into the backend, I look at how data moves between the interface, the API, and storage.</p>
-            <p>I’m especially interested in work that connects interface decisions with full-stack implementation. I want to keep building products that are usable in day-to-day work and straightforward for a team to maintain.</p>
+            <p>I start with the task someone needs to finish. If I’m building a page, I check that they can finish that task on a phone as easily as on a desktop.</p>
+            <p>I like working on both sides of a feature, from the React interface to the API and the database. I want to keep building tools people can use every day and other developers can maintain.</p>
           </div>
         </section>
       </div>
